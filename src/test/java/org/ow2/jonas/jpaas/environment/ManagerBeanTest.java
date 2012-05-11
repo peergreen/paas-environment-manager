@@ -16,7 +16,7 @@ public class ManagerBeanTest {
    */
   private static final String DEFAULT_INITIAL_CONTEXT_FACTORY = "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
   private static final String  DEFAULT_PROVIDER_URL = "rmi://localhost:7099";
-  private static final String DEFAULT_EJB_NAME_REMOTE_MANAGER= "org.ow2.jonas.jpaas.environment.ManagerBean_org.ow2.jonas.jpaas.environment.ManagerRemote@Remote"
+  private static final String DEFAULT_EJB_NAME_REMOTE_MANAGER= "org.ow2.jonas.jpaas.environment.ManagerBean_org.ow2.jonas.jpaas.environment.ManagerRemote@Remote";
 
   @Test
   public void testCreateEnvironment() throws Exception {
