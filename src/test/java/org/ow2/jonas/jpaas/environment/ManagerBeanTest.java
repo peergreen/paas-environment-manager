@@ -16,6 +16,7 @@ public class ManagerBeanTest {
    */
   private static final String DEFAULT_INITIAL_CONTEXT_FACTORY = "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
   private static final String  DEFAULT_PROVIDER_URL = "rmi://localhost:7099";
+  private static final String DEFAULT_EJB_NAME_REMOTE_MANAGER= "org.ow2.jonas.jpaas.environment.ManagerBean_org.ow2.jonas.jpaas.environment.ManagerRemote@Remote"
 
   @Test
   public void testCreateEnvironment() throws Exception {
@@ -28,8 +29,7 @@ public class ManagerBeanTest {
     }
     ManagerRemote statefulBean = null;
     try {
-      statefulBean = (ManagerRemote) initialContext
-          .lookup("org.ow2.easybeans.examples.statelessbean.StatelessBean_org.ow2.easybeans.examples.statelessbean.StatelessRemote@Remote");
+      statefulBean = (ManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_MANAGER);
     } catch (NamingException e) {
       Assert.fail("Cannot get statefulBean: " + e);
     }
