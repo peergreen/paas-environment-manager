@@ -8,11 +8,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>environment-manager</artifactId>
-  <name>JPaaS :: Environement Manager</name>
+  <artifactId>environment-manager-ejb</artifactId>
+  <name>JPaaS :: Environement Manager EJB</name>
   <packaging>ejb</packaging>
 
-  <description>jPaaS :: Environment Manager</description>
+  <description>jPaaS :: Environment Manager EJB</description>
 
   <developers/>
   <licenses>
@@ -22,11 +22,18 @@
     </license>
   </licenses>
   <dependencies>
-    <dependency>
+    <!--dependency>
       <groupId>javaee</groupId>
       <artifactId>javaee-api</artifactId>
       <version>5</version>
       <scope>provided</scope>
+    </dependency-->
+    <dependency>
+     <groupId>org.jboss.spec</groupId>
+     <artifactId>jboss-javaee-6.0</artifactId>
+     <version>1.0.0.Final</version>
+     <type>pom</type>
+     <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.bonita</groupId>
@@ -69,21 +76,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-resources-JAAS</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/resources/security</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
             <id>copy-resources-Process</id>
             <phase>validate</phase>
             <goals>
@@ -116,7 +108,6 @@
             </configuration>
             </execution>
         </executions>
-
       </plugin>-->
 
       <plugin>
