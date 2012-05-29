@@ -8,7 +8,7 @@
 		<session>
 			<ejb-name>ManagerBean</ejb-name>
 			<env-entry>
-				<env-entry-name>processNameCreateEnvironmentAndVersion</env-entry-name>
+				<env-entry-name>processNameAndVersionCreateEnvironment</env-entry-name>
 				<env-entry-type>java.lang.String</env-entry-type>
 				<env-entry-value>CreateEnvironement--1.0.bar</env-entry-value>
 			</env-entry>

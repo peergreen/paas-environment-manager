@@ -2,13 +2,11 @@ package org.ow2.jonas.jpaas.environment;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.ow2.bonita.util.SimpleCallbackHandler;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 import java.util.Hashtable;
 
 
@@ -23,12 +21,11 @@ public class ManagerBeanTest {
   private LoginContext loginContext = null;
 
   @Test
-  public void testCreateEnvironment() throws Exception {
+  public void testCreateOneEnvironment() throws Exception {
     Context initialContext = null;
 
     try {
       initialContext = getInitialContext();
-      //login();
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
@@ -39,6 +36,31 @@ public class ManagerBeanTest {
       Assert.fail("Cannot get statefulBean: " + e);
     }
     String idProcess = statefulBean.createEnvironment("test");
+    Assert.assertNotNull(idProcess);
+  }
+
+  @Test
+  public void testCreateTwoEnvironments() throws Exception {
+    Context initialContext = null;
+
+    try {
+      initialContext = getInitialContext();
+    } catch (NamingException e) {
+       Assert.fail("Cannot get InitialContext: " + e);
+    }
+    ManagerRemote statefulBean = null;
+    try {
+      statefulBean = (ManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_MANAGER);
+    } catch (NamingException e) {
+      Assert.fail("Cannot get statefulBean: " + e);
+    }
+    String idProcess1 = statefulBean.createEnvironment("test");
+    Assert.assertNotNull(idProcess1);
+
+    String idProcess2 = statefulBean.createEnvironment("test");
+    Assert.assertNotNull(idProcess2);
+
+    Assert.assertFalse(idProcess1.equals(idProcess2));
   }
 
   /**
@@ -52,22 +74,6 @@ public class ManagerBeanTest {
     env.put(Context.PROVIDER_URL, DEFAULT_PROVIDER_URL);
 
     return new InitialContext(env);
-  }
-
-  private void login() throws ManagerBeanException{
-    try {
-      if (loginContext == null) {
-         loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin", "bpm"));
-      }
-      if (loginContext == null) {
-        throw (new ManagerBeanException());
-      }
-      else {
-        loginContext.login();
-      }
-    } catch (LoginException e) {
-      e.printStackTrace();
-    }
   }
 
 }

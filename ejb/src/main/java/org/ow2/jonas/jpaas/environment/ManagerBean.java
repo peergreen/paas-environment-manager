@@ -25,14 +25,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Stateful
 @Local(ManagerLocal.class)
 @Remote(ManagerRemote.class)
 public class ManagerBean {
-
-  private static final String DEFAULT_INITIAL_CONTEXT_FACTORY = "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
 
   private QueryDefinitionAPI queryDefinitionAPI;
   private RuntimeAPI runtimeAPI;
@@ -41,16 +40,87 @@ public class ManagerBean {
   private ProcessInstanceUUID uuidInstance = null;
   private LoginContext loginContext = null;
 
-  @Resource(name = "processNameCreateEnvironmentAndVersion")
-  private String processNameAndVersionCreateEnvironment = "CreateEnvironement--1.0.bar";
+  @Resource(name = "processNameAndVersionCreateEnvironment")
+  private String processNameAndVersionCreateEnvironment = "CreateEnvironement--1.0.bar";  // default value overrides by specific deployement descritor value
 
-  public ManagerBean() {
+  public ManagerBean() throws ManagerBeanException {
+     initEnv();
+  }
+
+  public String createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException {
     try {
-      initEnv();
+      login();
+      // deploy process once only
+      synchronized (this) {
+        if (uuidProcessCreateEnvironnement == null)
+          deployProcessCreateEnvironment();
+      }
+      Map param = new HashMap();
+      //  TODO : ajouter paramètres param.put("Env", environmentTemplateDescriptor);
+      if (uuidProcessCreateEnvironnement != null) {
+         uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement);
+         return uuidInstance.getValue();
+      }
+      else {
+         throw (new ManagerBeanException("process CreateEnvironment can't be deploy on server..."));
+      }
+    } catch (ProcessNotFoundException e) {
+      e.printStackTrace();
+      return null;
+      // } catch (VariableNotFoundException e) {
+      //   e.printStackTrace();
+      //   return null;
     } catch (ManagerBeanException e) {
-      //TODO
+      e.printStackTrace();
+      throw (new ManagerBeanException("Error during deployment of the process CreateEnvironment"));
+    } finally {
+      logout();
     }
   }
+
+  public void deleteEnvironment(String envid) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called");
+  }
+
+  public List findEnvironments() {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
+    return null;
+  }
+
+  public String startEnvironment(String envId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
+    return null;
+  }
+
+  public String stopEnvironment(String envId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
+    return null;
+  }
+
+  public void deployApplication(String envId, String appId,String versionId, String instanceId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / deployApplication called");
+  }
+
+  public void undeployApplication(String envId, String appId,String versionId, String instanceId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / undeployApplication called");
+  }
+
+  public void getEnvironment(String envId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / getEnvironment called");
+  }
+
+  public void getDeployedApplicationVersionInstance(String envId) {
+    //TODO
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / getDeployedApplicationVersionInstance called");
+  }
+
 
   private boolean deployProcessCreateEnvironment() {
     final File tempFileBarProcess;
@@ -94,49 +164,19 @@ public class ManagerBean {
     return (tempFile);
   }
 
-  public String createEnvironment(String environmentTemplateDescriptor) {
-    try {
-      login();
-      // deploy process once only
-      synchronized (this) {
-        if (uuidProcessCreateEnvironnement == null)
-          deployProcessCreateEnvironment();
-      }
-      Map param = new HashMap();
-      //  TODO : ajouter paramètres param.put("Env", environmentTemplateDescriptor);
-      if (uuidProcessCreateEnvironnement != null) {
-         uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement);
-         return uuidInstance.getValue();
-      }
-      else {
-        System.out.println("PROBLEME AVEC LA CREATION DU PROCESS");
-        return null;
-      }
-    } catch (ProcessNotFoundException e) {
-      e.printStackTrace();
-      return null;
-      // } catch (VariableNotFoundException e) {
-      //   e.printStackTrace();
-      //   return null;
-    } catch (ManagerBeanException e) {
-      e.printStackTrace();
-      return null;
-    } finally {
-      logout();
-    }
-  }
-
   private ProcessDefinitionUUID deployBarFile(BusinessArchive businessArchive) throws Exception {
     try {
       ProcessDefinition p = queryDefinitionAPI.getProcess(businessArchive.getProcessDefinition().getUUID());
       return p.getUUID();
     } catch (ProcessNotFoundException e) {
-      final ProcessDefinition process = managementAPI.deploy(businessArchive);//deployJar
+      final ProcessDefinition process = managementAPI.deploy(businessArchive); //deployJar
       return process.getUUID();
     }
   }
 
   private void initEnv() throws ManagerBeanException {
+    String DEFAULT_INITIAL_CONTEXT_FACTORY = "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
+
     System.setProperty(BonitaConstants.API_TYPE_PROPERTY, "EJB3");
     System.setProperty(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_INITIAL_CONTEXT_FACTORY);
     System.setProperty("java.naming.provider.url", "rmi://localhost:7099");
@@ -146,30 +186,33 @@ public class ManagerBean {
   }
 
   private void login() throws ManagerBeanException {
+    String login = "admin";
+    String password = "bpm";
     try {
       if (loginContext == null) {
-        loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin", "bpm"));
+        loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler(login, password));
       }
       if (loginContext == null) {
-        throw (new ManagerBeanException());
+        throw (new ManagerBeanException("Error during login with login:" + login + "and password:" + password));
       } else {
         loginContext.login();
       }
     } catch (LoginException e) {
       e.printStackTrace();
+      throw (new ManagerBeanException("Error during login with login:" + login + "and password:" + password));
     }
   }
 
-  private boolean logout() {
+  private void logout() throws ManagerBeanException {
     try {
       if (loginContext != null) {
         loginContext.logout();
-        return true;
+        loginContext = null;
       } else
-        return false;
+        throw (new ManagerBeanException("Error during logout. The loginContext is null"));
     } catch (LoginException e) {
       e.printStackTrace();
-      return false;
+      throw (new ManagerBeanException("Error during logout : loginException"));
     }
   }
 }
