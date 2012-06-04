@@ -10,7 +10,7 @@
 			<env-entry>
 				<env-entry-name>processNameAndVersionCreateEnvironment</env-entry-name>
 				<env-entry-type>java.lang.String</env-entry-type>
-				<env-entry-value>CreateEnvironement--1.0.bar</env-entry-value>
+				<env-entry-value>CreateEnvironment--1.0.bar</env-entry-value>
 			</env-entry>
 		</session>
 	</enterprise-beans>

@@ -41,7 +41,7 @@ public class ManagerBean {
   private LoginContext loginContext = null;
 
   @Resource(name = "processNameAndVersionCreateEnvironment")
-  private String processNameAndVersionCreateEnvironment = "CreateEnvironement--1.0.bar";  // default value overrides by specific deployement descritor value
+  private String processNameAndVersionCreateEnvironment = "CreateEnvironment--1.0.bar";  // default value overrides by specific deployment descritor value
 
   public ManagerBean() throws ManagerBeanException {
      initEnv();
@@ -152,7 +152,7 @@ public class ManagerBean {
     java.io.FileOutputStream destinationFile = new java.io.FileOutputStream(tempFile);
     InputStream processBarStream = processBar.openStream();
     try {
-      // Lecture par segment de 0.5Mo
+      // 0.5Mo
       byte buffer[] = new byte[512 * 1024];
       int nbLecture;
       while ((nbLecture = processBarStream.read(buffer)) != -1) {
@@ -179,7 +179,6 @@ public class ManagerBean {
 
     System.setProperty(BonitaConstants.API_TYPE_PROPERTY, "EJB3");
     System.setProperty(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_INITIAL_CONTEXT_FACTORY);
-    System.setProperty("java.naming.provider.url", "rmi://localhost:7099");
     queryDefinitionAPI = AccessorUtil.getQueryDefinitionAPI();
     runtimeAPI = AccessorUtil.getRuntimeAPI();
     managementAPI = AccessorUtil.getManagementAPI();
