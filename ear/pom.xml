@@ -52,6 +52,11 @@
       <version>${project.version}</version>
       <type>ejb</type>
     </dependency>
+    <dependency>
+      <groupId>org.ow2.jonas.jpaas</groupId>
+      <artifactId>jpaas-manager-api</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -62,7 +67,7 @@
         <version>2.7</version>
 
         <configuration>
-          <packagingIncludes>**/environment-manager-ejb*.jar, **/bonita-client*.jar</packagingIncludes>
+          <packagingIncludes>**/environment-manager-ejb*.jar, **/bonita-client*.jar, **/jpaas-manager-api*.jar</packagingIncludes>
           <defaultJavaBundleDir>lib/</defaultJavaBundleDir>
           <modules>
             <ejbModule>

@@ -2,6 +2,7 @@ package org.ow2.jonas.jpaas.environment;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.ow2.jonas.jpaas.api.Environment;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,7 +36,7 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
       Assert.fail("Cannot get statefulBean: " + e);
     }
-    String idProcess = statefulBean.createEnvironment("test");
+    Environment idProcess = statefulBean.createEnvironment("test");
     Assert.assertNotNull(idProcess);
   }
 
@@ -54,13 +55,13 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
       Assert.fail("Cannot get statefulBean: " + e);
     }
-    String idProcess1 = statefulBean.createEnvironment("test");
-    Assert.assertNotNull(idProcess1);
+    Environment idProcess1 = statefulBean.createEnvironment("test");
+    Assert.assertNotNull(idProcess1.getEnvId());
 
-    String idProcess2 = statefulBean.createEnvironment("test");
-    Assert.assertNotNull(idProcess2);
+    Environment idProcess2 = statefulBean.createEnvironment("test");
+    Assert.assertNotNull(idProcess2.getEnvId());
 
-    Assert.assertFalse(idProcess1.equals(idProcess2));
+    Assert.assertFalse(idProcess1.getEnvId().equals(idProcess2.getEnvId()));
   }
 
   /**

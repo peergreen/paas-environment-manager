@@ -12,6 +12,7 @@ import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
 import org.ow2.bonita.util.SimpleCallbackHandler;
+import org.ow2.jonas.jpaas.api.Environment;
 
 import javax.annotation.Resource;
 import javax.ejb.Local;
@@ -47,7 +48,7 @@ public class ManagerBean {
      initEnv();
   }
 
-  public String createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException {
+  public Environment createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException {
     try {
       login();
       // deploy process once only
@@ -59,7 +60,9 @@ public class ManagerBean {
       //  TODO : ajouter paramètres param.put("Env", environmentTemplateDescriptor);
       if (uuidProcessCreateEnvironnement != null) {
          uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement);
-         return uuidInstance.getValue();
+         Environment env = new Environment();
+         env.setEnvId(uuidInstance.getValue());
+         return env;
       }
       else {
          throw (new ManagerBeanException("process CreateEnvironment can't be deploy on server..."));
