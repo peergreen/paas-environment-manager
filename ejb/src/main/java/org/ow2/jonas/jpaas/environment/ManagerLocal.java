@@ -1,18 +1,43 @@
+/**
+ * JPaaS Util
+ * Copyright (C) 2012 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
+ */
 package org.ow2.jonas.jpaas.environment;
 
-
+import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
 import org.ow2.jonas.jpaas.api.Environment;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 public interface ManagerLocal {
-  public Environment createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException;
+  public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException;
   public void deleteEnvironment(String envid);
   public List<Environment> findEnvironments();
-  public String startEnvironment(String envId);
-  public String stopEnvironment(String envId);
-  public void deployApplication(String envId, String appId,String versionId, String instanceId);
-  public void undeployApplication(String envId, String appId,String versionId, String instanceId);
-  public void getEnvironment(String envId);
-  public void getDeployedApplicationVersionInstance(String envId);
+  public Future<Environment> startEnvironment(String envId);
+  public Future<Environment> stopEnvironment(String envId);
+  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId);
+  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId);
+  public Environment getEnvironment(String envId);
+  public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId);
 }

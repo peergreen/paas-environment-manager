@@ -1,3 +1,27 @@
+/**
+ * JPaaS Util
+ * Copyright (C) 2012 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
+ */
 package org.ow2.jonas.jpaas.environment;
 
 import org.ow2.bonita.facade.ManagementAPI;
@@ -12,6 +36,7 @@ import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
 import org.ow2.bonita.util.SimpleCallbackHandler;
+import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
 import org.ow2.jonas.jpaas.api.Environment;
 
 import javax.annotation.Resource;
@@ -28,6 +53,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Stateful
 @Local(ManagerLocal.class)
@@ -48,7 +77,7 @@ public class ManagerBean {
      initEnv();
   }
 
-  public Environment createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException {
+  public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException {
     try {
       login();
       // deploy process once only
@@ -59,17 +88,26 @@ public class ManagerBean {
       Map param = new HashMap();
       //  TODO : ajouter paramètres param.put("Env", environmentTemplateDescriptor);
       if (uuidProcessCreateEnvironnement != null) {
-         uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement);
-         Environment env = new Environment();
-         env.setEnvId(uuidInstance.getValue());
-         return env;
+
+
+         ExecutorService es = Executors.newFixedThreadPool(3);
+         final Future<Environment> future = es.submit(new Callable() {
+                    public Object call() throws Exception {
+                        uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement);
+                        Environment env = new Environment();
+                        env.setEnvId(uuidInstance.getValue());
+                        return env;
+                    }
+         });
+
+         return future;
       }
       else {
          throw (new ManagerBeanException("process CreateEnvironment can't be deploy on server..."));
       }
-    } catch (ProcessNotFoundException e) {
-      e.printStackTrace();
-      return null;
+   // } catch (ProcessNotFoundException e) {
+   //   e.printStackTrace();
+   //   return null;
       // } catch (VariableNotFoundException e) {
       //   e.printStackTrace();
       //   return null;
@@ -92,36 +130,40 @@ public class ManagerBean {
     return null;
   }
 
-  public String startEnvironment(String envId) {
+  public Future<Environment> startEnvironment(String envId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
     return null;
   }
 
-  public String stopEnvironment(String envId) {
+  public Future<Environment> stopEnvironment(String envId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
     return null;
   }
 
-  public void deployApplication(String envId, String appId,String versionId, String instanceId) {
+  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / deployApplication called");
+    return null;
   }
 
-  public void undeployApplication(String envId, String appId,String versionId, String instanceId) {
+  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / undeployApplication called");
+    return null;
   }
 
-  public void getEnvironment(String envId) {
+  public Environment getEnvironment(String envId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / getEnvironment called");
+    return null;
   }
 
-  public void getDeployedApplicationVersionInstance(String envId) {
+  public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / getDeployedApplicationVersionInstance called");
+    return null;
   }
 
 
