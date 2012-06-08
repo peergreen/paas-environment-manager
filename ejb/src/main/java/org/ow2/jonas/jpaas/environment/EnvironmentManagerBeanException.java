@@ -24,6 +24,12 @@
  */
 package org.ow2.jonas.jpaas.environment;
 
-public interface ManagerRemote  extends ManagerLocal {
+public class EnvironmentManagerBeanException extends Exception {
+
+   public EnvironmentManagerBeanException() {}
+
+   public EnvironmentManagerBeanException(String message) {
+     super(message);
+   }
 
 }

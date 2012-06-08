@@ -24,12 +24,20 @@
  */
 package org.ow2.jonas.jpaas.environment;
 
-public class ManagerBeanException extends Exception {
+import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
+import org.ow2.jonas.jpaas.api.Environment;
 
-   public ManagerBeanException() {}
+import java.util.List;
+import java.util.concurrent.Future;
 
-   public ManagerBeanException(String message) {
-     super(message);
-   }
-
+public interface EnvironmentManagerLocal {
+  public Environment createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException;
+  public void deleteEnvironment(String envid);
+  public List<Environment> findEnvironments();
+  public Future<Environment> startEnvironment(String envId);
+  public Future<Environment> stopEnvironment(String envId);
+  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId);
+  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId);
+  public Environment getEnvironment(String envId);
+  public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId);
 }

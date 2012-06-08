@@ -32,6 +32,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginContext;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Hashtable;
 
 
@@ -42,11 +47,11 @@ public class ManagerBeanTest {
    */
   private static final String DEFAULT_INITIAL_CONTEXT_FACTORY = "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
   private static final String  DEFAULT_PROVIDER_URL = "rmi://localhost:7099";
-  private static final String DEFAULT_EJB_NAME_REMOTE_MANAGER= "org.ow2.jonas.jpaas.environment.ManagerBean_org.ow2.jonas.jpaas.environment.ManagerRemote@Remote";
+  private static final String DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER= "EnvironmentManagerBean";
   private LoginContext loginContext = null;
 
   @Test
-  public void testCreateOneEnvironment() throws Exception {
+  public void testCreateEnvironmentsAtTheSameTime() throws Exception {
     Context initialContext = null;
 
     try {
@@ -54,15 +59,46 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    ManagerRemote statefulBean = null;
+    EnvironmentManagerRemote statefulBean = null;
     try {
-      statefulBean = (ManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_MANAGER);
+      statefulBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
-      Assert.fail("Cannot get statefulBean: " + e);
+      Assert.fail("Cannot get Bean: " + e);
     }
-    Environment idProcess = statefulBean.createEnvironment("test").get();
-    Assert.assertNotNull(idProcess);
+
+    Thread thread1 = new BasicThread1(statefulBean);
+    thread1.start();
+
+    Thread thread2 = new BasicThread1(statefulBean);
+    thread2.start();
+
+    Thread thread3 = new BasicThread1(statefulBean);
+    thread3.start();
+
+    Thread thread4 = new BasicThread1(statefulBean);
+    thread4.start();
   }
+
+  class BasicThread1 extends Thread {
+
+    EnvironmentManagerRemote envBean;
+    BasicThread1(EnvironmentManagerRemote bean) {
+      this.envBean = bean;
+    }
+
+    public void run() {
+      try {
+        Environment idProcess = envBean.createEnvironment("");//.get();
+        Assert.assertNotNull(idProcess);
+//      } catch (InterruptedException e) {
+//        Assert.fail(e.getMessage());
+//      } catch (ExecutionException e) {
+//        Assert.fail(e.getMessage());
+      } catch (EnvironmentManagerBeanException e) {
+        Assert.fail(e.getMessage());
+      }
+    }
+}
 
   @Test
   public void testCreateTwoEnvironments() throws Exception {
@@ -73,19 +109,46 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    ManagerRemote statefulBean = null;
+    EnvironmentManagerRemote envBean = null;
     try {
-      statefulBean = (ManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_MANAGER);
+      envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
-      Assert.fail("Cannot get statefulBean: " + e);
+      Assert.fail("Cannot get Bean: " + e);
     }
-    Environment idProcess1 = statefulBean.createEnvironment("test").get();
+    Environment idProcess1 = envBean.createEnvironment("");//.get();
     Assert.assertNotNull(idProcess1.getEnvId());
 
-    Environment idProcess2 = statefulBean.createEnvironment("test").get();
+    Environment idProcess2 = envBean.createEnvironment("");//.get();
     Assert.assertNotNull(idProcess2.getEnvId());
 
     Assert.assertFalse(idProcess1.getEnvId().equals(idProcess2.getEnvId()));
+  }
+
+  @Test
+  public void testCreateEnvironmentWithTemplate() throws Exception {
+
+    String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6.xml";
+    URL urlEnvironmentTemplate = this.getClass().getClassLoader().getResource(PATH_EXAMPLE_1);
+
+    Context initialContext = null;
+
+    try {
+      initialContext = getInitialContext();
+    } catch (NamingException e) {
+       Assert.fail("Cannot get InitialContext: " + e);
+    }
+    EnvironmentManagerRemote envBean = null;
+    try {
+      envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+    } catch (NamingException e) {
+      Assert.fail("Cannot get Bean: " + e);
+    }
+    if (urlEnvironmentTemplate != null) {
+      Environment idProcess1 = envBean.createEnvironment(convertUrlToString(urlEnvironmentTemplate));//.get();
+      Assert.assertNotNull(idProcess1.getEnvId());
+    } else {
+      Assert.fail("template environment can't find in ressource");
+    }
   }
 
   /**
@@ -99,6 +162,22 @@ public class ManagerBeanTest {
     env.put(Context.PROVIDER_URL, DEFAULT_PROVIDER_URL);
 
     return new InitialContext(env);
+  }
+
+  private String convertUrlToString(URL file) throws IOException {
+
+     InputStream processBarStream = file.openStream();
+     InputStreamReader is = new InputStreamReader(processBarStream);
+     BufferedReader br = new BufferedReader(is);
+     String read = br.readLine();
+     StringBuffer sb = new StringBuffer(read);
+      while(read != null) {
+          read = br.readLine();
+          if (read != null)
+             sb.append(read);
+      }
+
+      return sb.toString();
   }
 
 }

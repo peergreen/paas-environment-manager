@@ -24,20 +24,6 @@
  */
 package org.ow2.jonas.jpaas.environment;
 
-import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
-import org.ow2.jonas.jpaas.api.Environment;
+public interface EnvironmentManagerRemote extends EnvironmentManagerLocal {
 
-import java.util.List;
-import java.util.concurrent.Future;
-
-public interface ManagerLocal {
-  public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws ManagerBeanException;
-  public void deleteEnvironment(String envid);
-  public List<Environment> findEnvironments();
-  public Future<Environment> startEnvironment(String envId);
-  public Future<Environment> stopEnvironment(String envId);
-  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId);
-  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId);
-  public Environment getEnvironment(String envId);
-  public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId);
 }

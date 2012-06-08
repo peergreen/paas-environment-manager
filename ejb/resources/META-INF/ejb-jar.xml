@@ -6,7 +6,7 @@
          version="3.1">
 	<enterprise-beans>
 		<session>
-			<ejb-name>ManagerBean</ejb-name>
+			<ejb-name>EnvironmentManagerBean</ejb-name>
 			<env-entry>
 				<env-entry-name>processNameAndVersionCreateEnvironment</env-entry-name>
 				<env-entry-type>java.lang.String</env-entry-type>
