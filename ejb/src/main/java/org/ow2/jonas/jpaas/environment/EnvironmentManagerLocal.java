@@ -24,8 +24,8 @@
  */
 package org.ow2.jonas.jpaas.environment;
 
-import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
-import org.ow2.jonas.jpaas.api.Environment;
+import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
+import org.ow2.jonas.jpaas.manager.api.Environment;
 
 import java.util.List;
 import java.util.concurrent.Future;

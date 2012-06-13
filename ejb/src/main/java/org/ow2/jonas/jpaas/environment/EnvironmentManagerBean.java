@@ -36,8 +36,8 @@ import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
 import org.ow2.bonita.util.SimpleCallbackHandler;
-import org.ow2.jonas.jpaas.api.ApplicationVersionInstance;
-import org.ow2.jonas.jpaas.api.Environment;
+import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
+import org.ow2.jonas.jpaas.manager.api.Environment;
 
 import javax.annotation.Resource;
 import javax.ejb.Local;

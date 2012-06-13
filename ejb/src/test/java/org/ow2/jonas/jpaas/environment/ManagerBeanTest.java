@@ -26,7 +26,7 @@ package org.ow2.jonas.jpaas.environment;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.ow2.jonas.jpaas.api.Environment;
+import org.ow2.jonas.jpaas.manager.api.Environment;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
