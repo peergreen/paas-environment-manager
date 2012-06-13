@@ -143,6 +143,7 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
       Assert.fail("Cannot get Bean: " + e);
     }
+
     if (urlEnvironmentTemplate != null) {
       Environment idProcess1 = envBean.createEnvironment(convertUrlToString(urlEnvironmentTemplate));//.get();
       Assert.assertNotNull(idProcess1.getEnvId());
@@ -150,6 +151,35 @@ public class ManagerBeanTest {
       Assert.fail("template environment can't find in ressource");
     }
   }
+
+  @Test
+   public void testCreateEnvironmentWithTemplateWithNoRouter() throws Exception {
+
+     String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6-withnorouter.xml";
+     URL urlEnvironmentTemplate = this.getClass().getClassLoader().getResource(PATH_EXAMPLE_1);
+
+     Context initialContext = null;
+
+     try {
+       initialContext = getInitialContext();
+     } catch (NamingException e) {
+        Assert.fail("Cannot get InitialContext: " + e);
+     }
+     EnvironmentManagerRemote envBean = null;
+     try {
+       envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+     } catch (NamingException e) {
+       Assert.fail("Cannot get Bean: " + e);
+     }
+
+     if (urlEnvironmentTemplate != null) {
+       Environment idProcess1 = envBean.createEnvironment(convertUrlToString(urlEnvironmentTemplate));//.get();
+       Assert.assertNotNull(idProcess1.getEnvId());
+     } else {
+       Assert.fail("template environment can't find in ressource");
+     }
+   }
+
 
   /**
    * @return Returns the InitialContext.
