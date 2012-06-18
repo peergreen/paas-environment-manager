@@ -25,7 +25,6 @@
 package org.ow2.jonas.jpaas.environment;
 
 import junit.framework.Assert;
-import org.junit.Test;
 import org.ow2.jonas.jpaas.manager.api.Environment;
 
 import javax.naming.Context;
@@ -50,7 +49,7 @@ public class ManagerBeanTest {
   private static final String DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER= "EnvironmentManagerBean";
   private LoginContext loginContext = null;
 
-  @Test
+  //@Test
   public void testCreateEnvironmentsAtTheSameTime() throws Exception {
     Context initialContext = null;
 
@@ -100,7 +99,7 @@ public class ManagerBeanTest {
     }
 }
 
-  @Test
+  //@Test
   public void testCreateTwoEnvironments() throws Exception {
     Context initialContext = null;
 
@@ -124,7 +123,7 @@ public class ManagerBeanTest {
     Assert.assertFalse(idProcess1.getEnvId().equals(idProcess2.getEnvId()));
   }
 
-  @Test
+  //@Test
   public void testCreateEnvironmentWithTemplate() throws Exception {
 
     String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6.xml";
@@ -152,7 +151,7 @@ public class ManagerBeanTest {
     }
   }
 
-  @Test
+  //@Test
    public void testCreateEnvironmentWithTemplateWithNoRouter() throws Exception {
 
      String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6-withnorouter.xml";
@@ -181,7 +180,7 @@ public class ManagerBeanTest {
    }
 
 
-    @Test
+  //@Test
   public void testCreateEnvironmentWithTemplateAndTwoNodes() throws Exception {
 
     String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6-with-two-nodes.xml";
