@@ -182,9 +182,9 @@ public class ManagerBeanTest {
 
 
     @Test
-  public void testCreateEnvironmentWithTemplateAndTwoRouters() throws Exception {
+  public void testCreateEnvironmentWithTemplateAndTwoNodes() throws Exception {
 
-    String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6-with-two-routers.xml";
+    String PATH_EXAMPLE_1 = "xmlExamples/environment-template-v6-with-two-nodes.xml";
     URL urlEnvironmentTemplate = this.getClass().getClassLoader().getResource(PATH_EXAMPLE_1);
 
     Context initialContext = null;
