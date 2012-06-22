@@ -129,52 +129,8 @@ public class EnvironmentManagerBean {
   public List<Environment> findEnvironments() {
     //TODO
 	  
-      System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
-	  ArrayList <Environment> listEnv=new ArrayList <Environment>();
-	  
-	  //1rst environment 
-	  Environment env1=new Environment();
-	  env1.setEnvId("1");
-	  env1.setEnvName("My first environment");
-	  env1.setState(Environment.ENV_RUNNING);
-	  
-	  ApplicationVersionInstance instance1=new ApplicationVersionInstance();
-	  instance1.setInstanceId("1");
-	  instance1.setInstanceName("1rst instance of the 1rst environment");
-	  instance1.setState(ApplicationVersionInstance.INSTANCE_STARTED);
-	  
-	  ApplicationVersionInstance instance2=new ApplicationVersionInstance();
-	  instance2.setInstanceId("2");
-	  instance2.setInstanceName("2nd instance of the 1rst environment");
-	  instance2.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-	  
-	  env1.getListApplicationVersionInstance().add(instance1);
-	  env1.getListApplicationVersionInstance().add(instance2);
-	  
-	  //2nd environment
-	  Environment env2=new Environment();
-	  env2.setEnvId("2");
-	  env2.setEnvName("My second environment");
-	  env2.setState(Environment.ENV_STOPPED);
-	  
-	  ApplicationVersionInstance instance3=new ApplicationVersionInstance();
-	  instance3.setInstanceId("3");
-	  instance3.setInstanceName("1rst instance of the 2nd environment");
-	  instance3.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-	  
-	  ApplicationVersionInstance instance4=new ApplicationVersionInstance();
-	  instance4.setInstanceId("4");
-	  instance4.setInstanceName("2nd instance of the 2nd environment");
-	  instance4.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-	  
-	  env2.getListApplicationVersionInstance().add(instance3);
-	  env2.getListApplicationVersionInstance().add(instance4);
-	  
-	  //add all environments in the list
-	  listEnv.add(env1);
-	  listEnv.add(env2);
-	  
-    return listEnv;
+      System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");  
+    return null;
   }
 
   public Future<Environment> startEnvironment(String envId) {
