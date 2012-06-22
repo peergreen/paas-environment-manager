@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:decision="http://www.bonitasoft.org/ns/studio/process/decision" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:process="http://www.bonitasoft.org/ns/studio/process" xmlns:transitions="http://www.bonitasoft.org/ns/studio/process/decision/transitions" xsi:schemaLocation="http://www.bonitasoft.org/ns/studio/process/decision http://www.bonitasoft.org/ns/studio/process#//decision http://www.bonitasoft.org/ns/studio/process/decision/transitions http://www.bonitasoft.org/ns/studio/process#//decision/transitions">
+  <process:MainProcess xmi:id="_JluuYHyrEeGx_oVsekGjgA" name="ProcessTestAppelEJB" label="ProcessTestAppelEJB" bonitaVersion="5.6" bonitaModelVersion="5.6">
+    <elements xmi:type="process:Pool" xmi:id="_JqDNsHyrEeGx_oVsekGjgA" name="CreateEnvironment" label="CreateEnvironment" welcomePageInternal="false" basedOnLookAndFeel="Default Application">
+      <elements xmi:type="process:StartEvent" xmi:id="_Mfpt0I-vEeGOSoN23XXwZA" name="Debut1" label="Debut1" outgoing="_cyfH8LGBEeGc8OUUGPyhig"/>
+      <elements xmi:type="process:ServiceTask" xmi:id="_UeWqsJBoEeGOSoN23XXwZA" name="CreateRouter" label="CreateRouter" outgoing="_mzAWUJKjEeGq74KY17GRVQ" incoming="_bjbVoLO3EeGc8OUUGPyhig" synchronous="false">
+        <connectors xmi:type="process:Connector" xmi:id="_1wbHsLVcEeGJ_uzM9K5NLQ" name="CallEJBCreateApplication" label="CallEJBCreateApplication" connectorId="JPaasConnecteurEJB" event="automaticOnExit" ignoreErrors="false">
+          <parameters xmi:type="process:Parameter" xmi:id="_cT8uMLlKEeG_tI0Okak7XA" key="setEjbMethod" value="ACED00057400116372656174654170706C69636174696F6E"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_cT8uMblKEeG_tI0Okak7XA" key="setParams" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A657870000000017704000000017371007E00000000000277040000000A7400106A6176612E6C616E672E537472696E67740018247B726F75746575726E616D652E6765744E616D6528297D7878"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_cT8uMrlKEeG_tI0Okak7XA" key="setEjbJndiName" value="ACED00057400164170706C69636174696F6E4D616E616765724265616E"/>
+          <outputs xmi:type="process:OutputParameterMapping" xmi:id="_cT8uM7lKEeG_tI0Okak7XA" valueExpression="result" targetData="_HhnyELVVEeGtOubSJaM8_Q"/>
+        </connectors>
+        <data xmi:type="process:JavaObjectData" xmi:id="_VQaaALlKEeG_tI0Okak7XA" name="routeurname" label="routeurname" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" transient="true" className="org.ow2.jonas.jpaas.util.clouddescriptors.environmenttemplate.jk.v1.generated.JkNodeTemplateType"/>
+        <multiInstantiation xmi:type="process:MultiInstantiation" xmi:id="_-FY2MLYaEeGDGaBo_BMnhQ" enabled="true">
+          <instantiator xmi:type="process:Connector" xmi:id="_-FY2MbYaEeGDGaBo_BMnhQ" name="RouterInstanciator" label="RouterInstanciator" connectorId="RouterInstantiator">
+            <parameters xmi:type="process:Parameter" xmi:id="_FTlK4LbOEeGDGaBo_BMnhQ" key="setListNodes" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A6578700000000177040000000174001C247B6C6973744E6F6465456E7654656D706C617465526F757465727D78"/>
+          </instantiator>
+          <joinChecker xmi:type="process:Connector" xmi:id="_-FY2MrYaEeGDGaBo_BMnhQ" name="InstanceRouterEnded" label="InstanceRouterEnded" connectorId="FixedNumberJoinChecker">
+            <parameters xmi:type="process:Parameter" xmi:id="_pNnwULbOEeGDGaBo_BMnhQ" key="setActivityNumber" value="ACED0005740023247B6C6973744E6F6465456E7654656D706C617465526F757465722E73697A6528297D"/>
+          </joinChecker>
+        </multiInstantiation>
+      </elements>
+      <elements xmi:type="process:EndEvent" xmi:id="_xugQAJKiEeGq74KY17GRVQ" name="Fin1" label="Fin1" incoming="_k0GC8LbcEeGODqpr_sxD9g"/>
+      <elements xmi:type="process:ServiceTask" xmi:id="_ta6wELPBEeGc8OUUGPyhig" name="ParseEnvironmentTemplate" label="ParseEnvironmentTemplate" outgoing="_U2lqMLO3EeGc8OUUGPyhig" incoming="_cyfH8LGBEeGc8OUUGPyhig">
+        <connectors xmi:type="process:Connector" xmi:id="_NjQ2MLbbEeGODqpr_sxD9g" documentation="ParseTemplateJava" name="ParseTemplateJava" label="ParseTemplateJava" connectorId="ParseTemplateJava" event="automaticOnExit" ignoreErrors="false">
+          <parameters xmi:type="process:Parameter" xmi:id="_NjQ2MbbbEeGODqpr_sxD9g" key="setTemplateEnv" value="ACED0005740020247B656E7669726F6E6D656E7454656D706C61746544657363726970746F727D"/>
+          <outputs xmi:type="process:OutputParameterMapping" xmi:id="_NjQ2MrbbEeGODqpr_sxD9g" valueExpression="nodesTemplateEnvRouter" targetData="_kFvtALbNEeGDGaBo_BMnhQ"/>
+          <outputs xmi:type="process:OutputParameterMapping" xmi:id="_NjQ2M7bbEeGODqpr_sxD9g" valueExpression="nodesTemplateEnvJonas" targetData="_TsXTwLYdEeGDGaBo_BMnhQ"/>
+          <outputs xmi:type="process:OutputParameterMapping" xmi:id="_NjQ2NLbbEeGODqpr_sxD9g" valueExpression="nodesTemplateEnvDbExt" targetData="_m8X74LbNEeGDGaBo_BMnhQ"/>
+        </connectors>
+        <multiInstantiation xmi:type="process:MultiInstantiation" xmi:id="_kiv1gLPBEeGc8OUUGPyhig">
+          <instantiator xmi:type="process:Connector" xmi:id="_kiv1gbPBEeGc8OUUGPyhig"/>
+          <joinChecker xmi:type="process:Connector" xmi:id="_kiv1grPBEeGc8OUUGPyhig"/>
+        </multiInstantiation>
+      </elements>
+      <elements xmi:type="process:ServiceTask" xmi:id="_UOZC8LPREeGc8OUUGPyhig" name="CreateContainer" label="CreateContainer" outgoing="_hHXggLPREeGc8OUUGPyhig" incoming="_z786gLPJEeGc8OUUGPyhig" synchronous="false">
+        <connectors xmi:type="process:Connector" xmi:id="_iyMjILVcEeGJ_uzM9K5NLQ" name="CallEJBCreateApplicationVersion" label="CallEJBCreateApplicationVersion" connectorId="JPaasConnecteurEJB" event="automaticOnExit" ignoreErrors="false">
+          <parameters xmi:type="process:Parameter" xmi:id="_mfZOgLlKEeG_tI0Okak7XA" key="setEjbMethod" value="ACED00057400186372656174654170706C69636174696F6E56657273696F6E"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_mfZOgblKEeG_tI0Okak7XA" key="setParams" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A657870000000017704000000017371007E00000000000277040000000A7400106A6176612E6C616E672E537472696E6774001A247B636F6E7461696E65726E616D652E6765744E616D6528297D7878"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_mfZOgrlKEeG_tI0Okak7XA" key="setEjbJndiName" value="ACED00057400164170706C69636174696F6E4D616E616765724265616E"/>
+        </connectors>
+        <data xmi:type="process:JavaObjectData" xmi:id="_g6O80LlKEeG_tI0Okak7XA" name="containername" label="containername" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" transient="true" className="org.ow2.jonas.jpaas.util.clouddescriptors.environmenttemplate.jonas.v1.generated.JonasNodeTemplateType"/>
+        <multiInstantiation xmi:type="process:MultiInstantiation" xmi:id="_aZVrYLk5EeGODqpr_sxD9g" enabled="true">
+          <instantiator xmi:type="process:Connector" xmi:id="_aZVrYbk5EeGODqpr_sxD9g" name="ContainerInstanciator" label="ContainerInstanciator" connectorId="ContainerInstantiator">
+            <parameters xmi:type="process:Parameter" xmi:id="_QkWGwbk6EeG_tI0Okak7XA" key="setListNodes" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A6578700000000177040000000174001B247B6C6973744E6F6465456E7654656D706C6174654A6F6E61737D78"/>
+          </instantiator>
+          <joinChecker xmi:type="process:Connector" xmi:id="_aZVrYrk5EeGODqpr_sxD9g" name="InstanceContainerEnded" label="InstanceContainerEnded" connectorId="FixedNumberJoinChecker">
+            <parameters xmi:type="process:Parameter" xmi:id="_Z8Q4YLk6EeG_tI0Okak7XA" key="setActivityNumber" value="ACED0005740022247B6C6973744E6F6465456E7654656D706C6174654A6F6E61732E73697A6528297D"/>
+          </joinChecker>
+        </multiInstantiation>
+      </elements>
+      <elements xmi:type="process:ANDGateway" xmi:id="_p4Uf8LYaEeGDGaBo_BMnhQ" name="Branchement1" label="Branchement1" outgoing="_bjbVoLO3EeGc8OUUGPyhig _z786gLPJEeGc8OUUGPyhig _u3a3MLYaEeGDGaBo_BMnhQ" incoming="_U2lqMLO3EeGc8OUUGPyhig" exclusiveOutgoingTransition="true"/>
+      <elements xmi:type="process:ServiceTask" xmi:id="_u3PRALYaEeGDGaBo_BMnhQ" name="CreateDatabase" label="CreateDatabase" outgoing="_yu9JcLYaEeGDGaBo_BMnhQ" incoming="_u3a3MLYaEeGDGaBo_BMnhQ" synchronous="false">
+        <connectors xmi:type="process:Connector" xmi:id="_RiRlULYeEeGDGaBo_BMnhQ" name="CallEJBCreateApplicationVersionInstance" label="CallEJBCreateApplicationVersionInstance" connectorId="JPaasConnecteurEJB" event="automaticOnExit" ignoreErrors="false">
+          <parameters xmi:type="process:Parameter" xmi:id="_OSUKALlLEeG_tI0Okak7XA" key="setEjbMethod" value="ACED00057400206372656174654170706C69636174696F6E56657273696F6E496E7374616E6365"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_OSUKAblLEeG_tI0Okak7XA" key="setParams" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A657870000000027704000000027371007E00000000000277040000000A7400106A6176612E6C616E672E537472696E67740019247B64617461626173656E616D652E6765744E616D6528297D787371007E00000000000277040000000A7400106A6176612E6C616E672E537472696E6774000574657374327878"/>
+          <parameters xmi:type="process:Parameter" xmi:id="_OSUKArlLEeG_tI0Okak7XA" key="setEjbJndiName" value="ACED00057400164170706C69636174696F6E4D616E616765724265616E"/>
+        </connectors>
+        <data xmi:type="process:JavaObjectData" xmi:id="_u4C7gLlKEeG_tI0Okak7XA" name="databasename" label="databasename" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" transient="true" className="org.ow2.jonas.jpaas.util.clouddescriptors.environmenttemplate.externaldb.v1.generated.ExternalDBNodeTemplateType"/>
+        <multiInstantiation xmi:type="process:MultiInstantiation" xmi:id="_dGq-4Lk6EeG_tI0Okak7XA" enabled="true">
+          <instantiator xmi:type="process:Connector" xmi:id="_dGq-4bk6EeG_tI0Okak7XA" name="databaseInstantiator" label="databaseInstantiator" connectorId="DatabaseInstantiator">
+            <parameters xmi:type="process:Parameter" xmi:id="_uQGlALk6EeG_tI0Okak7XA" key="setListNodes" value="ACED0005737200136A6176612E7574696C2E41727261794C6973747881D21D99C7619D03000149000473697A6578700000000177040000000174001B247B6C6973744E6F6465456E7654656D706C61746544624578747D78"/>
+          </instantiator>
+          <joinChecker xmi:type="process:Connector" xmi:id="_dGq-4rk6EeG_tI0Okak7XA" name="instanceDatabaseEnded" label="instanceDatabaseEnded" connectorId="FixedNumberJoinChecker">
+            <parameters xmi:type="process:Parameter" xmi:id="_yLmKMLk6EeG_tI0Okak7XA" key="setActivityNumber" value="ACED0005740022247B6C6973744E6F6465456E7654656D706C61746544624578742E73697A6528297D"/>
+          </joinChecker>
+        </multiInstantiation>
+      </elements>
+      <elements xmi:type="process:ANDGateway" xmi:id="_Yl8yQLklEeGODqpr_sxD9g" name="Branchement2" label="Branchement2" outgoing="_k0GC8LbcEeGODqpr_sxD9g" incoming="_mzAWUJKjEeGq74KY17GRVQ _hHXggLPREeGc8OUUGPyhig _yu9JcLYaEeGDGaBo_BMnhQ" exclusiveOutgoingTransition="true"/>
+      <resourceFolders xmi:type="process:ResourceFolder" xmi:id="_J7QScHyrEeGx_oVsekGjgA" path="User/_JqDNsHyrEeGx_oVsekGjgA/application/application"/>
+      <errorTemplate xmi:type="process:AssociatedFile" xmi:id="_J7QSc3yrEeGx_oVsekGjgA" path="User/_JqDNsHyrEeGx_oVsekGjgA/html/error.html"/>
+      <processTemplate xmi:type="process:AssociatedFile" xmi:id="_J7QScXyrEeGx_oVsekGjgA" path="User/_JqDNsHyrEeGx_oVsekGjgA/html/process.html"/>
+      <pageTemplate xmi:type="process:AssociatedFile" xmi:id="_J7QSdHyrEeGx_oVsekGjgA" path="User/_JqDNsHyrEeGx_oVsekGjgA/html/page.html"/>
+      <consultationTemplate xmi:type="process:AssociatedFile" xmi:id="_J7QScnyrEeGx_oVsekGjgA" path="User/_JqDNsHyrEeGx_oVsekGjgA/html/consultation.html"/>
+      <data xmi:type="process:JavaObjectData" xmi:id="_HhnyELVVEeGtOubSJaM8_Q" documentation="test" name="application" label="Application" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" className="org.ow2.jonas.jpaas.manager.api.Application"/>
+      <data xmi:type="process:Data" xmi:id="_Wns9gLF9EeGc8OUUGPyhig" name="environmentTemplateDescriptor" label="environmentTemplateDescriptor" dataType="_JluuZXyrEeGx_oVsekGjgA"/>
+      <data xmi:type="process:JavaObjectData" xmi:id="_m8X74LbNEeGDGaBo_BMnhQ" name="listNodeEnvTemplateDbExt" label="listNodeEnvTemplateDbExt" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" className="java.util.List"/>
+      <data xmi:type="process:JavaObjectData" xmi:id="_TsXTwLYdEeGDGaBo_BMnhQ" name="listNodeEnvTemplateJonas" label="listNodeEnvTemplateJonas" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" className="java.util.List"/>
+      <data xmi:type="process:JavaObjectData" xmi:id="_kFvtALbNEeGDGaBo_BMnhQ" name="listNodeEnvTemplateRouter" label="listNodeEnvTemplateRouter" dataType="_JluuZ3yrEeGx_oVsekGjgA" defaultValue="" className="java.util.List"/>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_mzAWUJKjEeGq74KY17GRVQ" source="_UeWqsJBoEeGOSoN23XXwZA" target="_Yl8yQLklEeGODqpr_sxD9g">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_mzAWUZKjEeGq74KY17GRVQ"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_cyfH8LGBEeGc8OUUGPyhig" source="_Mfpt0I-vEeGOSoN23XXwZA" target="_ta6wELPBEeGc8OUUGPyhig">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_cyfH8bGBEeGc8OUUGPyhig"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_U2lqMLO3EeGc8OUUGPyhig" source="_ta6wELPBEeGc8OUUGPyhig" target="_p4Uf8LYaEeGDGaBo_BMnhQ">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_U2mRQLO3EeGc8OUUGPyhig"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_bjbVoLO3EeGc8OUUGPyhig" label="" source="_p4Uf8LYaEeGDGaBo_BMnhQ" target="_UeWqsJBoEeGOSoN23XXwZA" condition="">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_vihPkLPeEeGtOubSJaM8_Q">
+          <lines xmi:type="decision:DecisionTableLine" xmi:id="_vihPkbPeEeGtOubSJaM8_Q">
+            <conditions xmi:type="decision:DecisionTableCondition" xmi:id="_vihPkrPeEeGtOubSJaM8_Q" operand1="nombreRouter" operator="&lt;=" operand2="0"/>
+            <action xmi:type="transitions:TakeTransitionAction" xmi:id="_vihPk7PeEeGtOubSJaM8_Q" takeTransition="true"/>
+          </lines>
+          <defaultAction xmi:type="transitions:TakeTransitionAction" xmi:id="_vih2oLPeEeGtOubSJaM8_Q" takeTransition="true"/>
+        </decisionTable>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_z786gLPJEeGc8OUUGPyhig" label="" source="_p4Uf8LYaEeGDGaBo_BMnhQ" target="_UOZC8LPREeGc8OUUGPyhig" condition="">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_z786gbPJEeGc8OUUGPyhig"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_hHXggLPREeGc8OUUGPyhig" source="_UOZC8LPREeGc8OUUGPyhig" target="_Yl8yQLklEeGODqpr_sxD9g">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_hHXggbPREeGc8OUUGPyhig"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_u3a3MLYaEeGDGaBo_BMnhQ" source="_p4Uf8LYaEeGDGaBo_BMnhQ" target="_u3PRALYaEeGDGaBo_BMnhQ">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_u3beQLYaEeGDGaBo_BMnhQ"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_yu9JcLYaEeGDGaBo_BMnhQ" source="_u3PRALYaEeGDGaBo_BMnhQ" target="_Yl8yQLklEeGODqpr_sxD9g">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_yu9JcbYaEeGDGaBo_BMnhQ"/>
+      </connections>
+      <connections xmi:type="process:SequenceFlow" xmi:id="_k0GC8LbcEeGODqpr_sxD9g" source="_Yl8yQLklEeGODqpr_sxD9g" target="_xugQAJKiEeGq74KY17GRVQ">
+        <decisionTable xmi:type="decision:DecisionTable" xmi:id="_k0GC8bbcEeGODqpr_sxD9g"/>
+      </connections>
+    </elements>
+    <groups xmi:type="process:Group" xmi:id="_J6hSoHyrEeGx_oVsekGjgA" documentation="Personne qui prend la première action pour démarrer le processus" name="Initiateur" label="Initiateur" connectorId="ProcessInitiatior"/>
+    <datatypes xmi:type="process:BooleanType" xmi:id="_JluuYXyrEeGx_oVsekGjgA" name="Boolean" label="Boolean"/>
+    <datatypes xmi:type="process:DateType" xmi:id="_JluuYnyrEeGx_oVsekGjgA" name="Date" label="Date"/>
+    <datatypes xmi:type="process:IntegerType" xmi:id="_JluuY3yrEeGx_oVsekGjgA" name="Integer" label="Integer"/>
+    <datatypes xmi:type="process:FloatType" xmi:id="_JluuZHyrEeGx_oVsekGjgA" name="Decimal" label="Decimal"/>
+    <datatypes xmi:type="process:StringType" xmi:id="_JluuZXyrEeGx_oVsekGjgA" name="Text" label="Text"/>
+    <datatypes xmi:type="process:AttachmentType" xmi:id="_JluuZnyrEeGx_oVsekGjgA" name="Attachment" label="Attachment"/>
+    <datatypes xmi:type="process:JavaType" xmi:id="_JluuZ3yrEeGx_oVsekGjgA" name="Java_object" label="Java object"/>
+    <datatypes xmi:type="process:XMLType" xmi:id="_JluuaHyrEeGx_oVsekGjgA" name="XML" label="XML"/>
+    <includedEntries>bonita/bonita</includedEntries>
+    <includedEntries>application-manager-ejb-1.0.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-manager-api-1.0.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-core-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-node-template-external-db-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-node-template-jk-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-node-template-jonas-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-topology-connector-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-environment-template-topology-datasource-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>jpaas-util-cloud-descriptors-common-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>util-log-1.0.36-SNAPSHOT.jar</includedEntries>
+    <includedEntries>util-i18n-1.0.36-SNAPSHOT.jar</includedEntries>
+    <includedEntries>JPaasConnecteurEJB</includedEntries>
+    <includedEntries>ParseTemplateJava</includedEntries>
+    <includedEntries>common-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-core-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-node-template-external-db-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-node-template-jk-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-node-template-jonas-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-topology-connector-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>environment-template-topology-datasource-1.0-SNAPSHOT.jar</includedEntries>
+    <includedEntries>RouterInstantiator</includedEntries>
+    <includedEntries>ContainerInstantiator</includedEntries>
+    <includedEntries>DatabaseInstantiator</includedEntries>
+  </process:MainProcess>
+  <notation:Diagram xmi:id="_JmSIAHyrEeGx_oVsekGjgA" type="Process" element="_JluuYHyrEeGx_oVsekGjgA" name="ProcessTestAppelEJB_1.0.proc" measurementUnit="Pixel">
+    <children xmi:type="notation:Node" xmi:id="_J50IAHyrEeGx_oVsekGjgA" type="2007" element="_JqDNsHyrEeGx_oVsekGjgA">
+      <children xmi:type="notation:DecorationNode" xmi:id="_J50vEHyrEeGx_oVsekGjgA" type="5008"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_J51WIHyrEeGx_oVsekGjgA" type="7001">
+        <children xmi:type="notation:Shape" xmi:id="_Mf924I-vEeGOSoN23XXwZA" type="3002" element="_Mfpt0I-vEeGOSoN23XXwZA" fontName="Sans">
+          <children xmi:type="notation:DecorationNode" xmi:id="_MgA6MI-vEeGOSoN23XXwZA" type="5024">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_MgA6MY-vEeGOSoN23XXwZA" y="5"/>
+          </children>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MgATII-vEeGOSoN23XXwZA" x="35" y="133" width="30" height="34"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_UedYYJBoEeGOSoN23XXwZA" type="3027" element="_UeWqsJBoEeGOSoN23XXwZA" fontName="Sans" fillColor="14334392" lineColor="10710316">
+          <children xmi:type="notation:DecorationNode" xmi:id="_UedYYpBoEeGOSoN23XXwZA" type="5017"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UedYYZBoEeGOSoN23XXwZA" x="542" y="46" width="120" height="60"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_xujTUJKiEeGq74KY17GRVQ" type="3003" element="_xugQAJKiEeGq74KY17GRVQ" fontName="Sans">
+          <children xmi:type="notation:DecorationNode" xmi:id="_xujTUpKiEeGq74KY17GRVQ" type="5025">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_xujTU5KiEeGq74KY17GRVQ" y="5"/>
+          </children>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xujTUZKiEeGq74KY17GRVQ" x="987" y="178"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_ta9zYLPBEeGc8OUUGPyhig" type="3027" element="_ta6wELPBEeGc8OUUGPyhig" fontName="Sans" fillColor="14334392" lineColor="10710316">
+          <children xmi:type="notation:DecorationNode" xmi:id="_tbCE0LPBEeGc8OUUGPyhig" type="5017"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ta-acLPBEeGc8OUUGPyhig" x="150" y="120" width="120" height="60"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_UObfMLPREeGc8OUUGPyhig" type="3027" element="_UOZC8LPREeGc8OUUGPyhig" fontName="Sans" fillColor="14334392" lineColor="10710316">
+          <children xmi:type="notation:DecorationNode" xmi:id="_UObfMrPREeGc8OUUGPyhig" type="5017"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UObfMbPREeGc8OUUGPyhig" x="547" y="159" width="125" height="62"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_p4h7ULYaEeGDGaBo_BMnhQ" type="3009" element="_p4Uf8LYaEeGDGaBo_BMnhQ" fontName="Sans">
+          <children xmi:type="notation:DecorationNode" xmi:id="_p4iiYLYaEeGDGaBo_BMnhQ" type="5020">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_p4iiYbYaEeGDGaBo_BMnhQ" y="5"/>
+          </children>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_p4h7UbYaEeGDGaBo_BMnhQ" x="319" y="120" width="43" height="43"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_u3UJgLYaEeGDGaBo_BMnhQ" type="3027" element="_u3PRALYaEeGDGaBo_BMnhQ" fontName="Sans" fillColor="14334392" lineColor="10710316">
+          <children xmi:type="notation:DecorationNode" xmi:id="_u3UwkLYaEeGDGaBo_BMnhQ" type="5017"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_u3UJgbYaEeGDGaBo_BMnhQ" x="546" y="256" width="128" height="64"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_YmBDsLklEeGODqpr_sxD9g" type="3009" element="_Yl8yQLklEeGODqpr_sxD9g" fontName="Sans">
+          <children xmi:type="notation:DecorationNode" xmi:id="_YmBDsrklEeGODqpr_sxD9g" type="5020">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_YmBDs7klEeGODqpr_sxD9g" y="5"/>
+          </children>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YmBDsbklEeGODqpr_sxD9g" x="814" y="173" width="43" height="43"/>
+        </children>
+      </children>
+      <styles xmi:type="notation:DescriptionStyle" xmi:id="_J50IAXyrEeGx_oVsekGjgA"/>
+      <styles xmi:type="notation:FontStyle" xmi:id="_J50IAnyrEeGx_oVsekGjgA" fontName="Sans"/>
+      <styles xmi:type="notation:LineStyle" xmi:id="_J50IA3yrEeGx_oVsekGjgA"/>
+      <styles xmi:type="notation:FillStyle" xmi:id="_J51WIXyrEeGx_oVsekGjgA"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_J50IBHyrEeGx_oVsekGjgA" width="1672" height="377"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_JmSIAXyrEeGx_oVsekGjgA"/>
+    <edges xmi:type="notation:Connector" xmi:id="_mzCLgJKjEeGq74KY17GRVQ" type="4001" element="_mzAWUJKjEeGq74KY17GRVQ" source="_UedYYJBoEeGOSoN23XXwZA" target="_YmBDsLklEeGODqpr_sxD9g" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_mzCykZKjEeGq74KY17GRVQ" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_mzCykpKjEeGq74KY17GRVQ" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_mzCyk5KjEeGq74KY17GRVQ" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_mzCylJKjEeGq74KY17GRVQ" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_mzCLgZKjEeGq74KY17GRVQ" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_mzCykJKjEeGq74KY17GRVQ" points="[0, 0, -257, -93]$[267, 0, 10, -93]$[267, 76, 10, -17]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_mzEnwJKjEeGq74KY17GRVQ" id="(1.0,0.7)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_cyiLQLGBEeGc8OUUGPyhig" type="4001" element="_cyfH8LGBEeGc8OUUGPyhig" source="_Mf924I-vEeGOSoN23XXwZA" target="_ta9zYLPBEeGc8OUUGPyhig" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_cyiyULGBEeGc8OUUGPyhig" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_cyiyUbGBEeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_cyiyUrGBEeGc8OUUGPyhig" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_cyiyU7GBEeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_cyiLQbGBEeGc8OUUGPyhig" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cyiLQrGBEeGc8OUUGPyhig" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_U2oGcLO3EeGc8OUUGPyhig" type="4001" element="_U2lqMLO3EeGc8OUUGPyhig" source="_ta9zYLPBEeGc8OUUGPyhig" target="_p4h7ULYaEeGDGaBo_BMnhQ" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_U2oGc7O3EeGc8OUUGPyhig" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_U2oGdLO3EeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_U2oGdbO3EeGc8OUUGPyhig" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_U2oGdrO3EeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_U2oGcbO3EeGc8OUUGPyhig" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_U2oGcrO3EeGc8OUUGPyhig" points="[0, -1, -261, 13]$[265, -1, 4, 13]"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_U2p7obO3EeGc8OUUGPyhig" id="(0.11627906976744186,0.4186046511627907)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_bjeY8LO3EeGc8OUUGPyhig" type="4001" element="_bjbVoLO3EeGc8OUUGPyhig" source="_p4h7ULYaEeGDGaBo_BMnhQ" target="_UedYYJBoEeGOSoN23XXwZA" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_bjeY87O3EeGc8OUUGPyhig" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_bjfAALO3EeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_bjfAAbO3EeGc8OUUGPyhig" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_bjfnELO3EeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_bjeY8bO3EeGc8OUUGPyhig" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_bjeY8rO3EeGc8OUUGPyhig" points="[-7, -15, -68, 33]$[43, -46, -18, 2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bjg1MLO3EeGc8OUUGPyhig" id="(1.0,0.6744186046511628)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bjhcQLO3EeGc8OUUGPyhig" id="(0.15,0.6)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_z7-vsLPJEeGc8OUUGPyhig" type="4001" element="_z786gLPJEeGc8OUUGPyhig" source="_p4h7ULYaEeGDGaBo_BMnhQ" target="_UObfMLPREeGc8OUUGPyhig" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_z7-vs7PJEeGc8OUUGPyhig" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_z7-vtLPJEeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_z7_WwLPJEeGc8OUUGPyhig" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_z7_WwbPJEeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_z7-vsbPJEeGc8OUUGPyhig" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_z7-vsrPJEeGc8OUUGPyhig" points="[3, 1, -186, -40]$[220, 1, 31, -40]$[220, 19, 31, -22]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z8Ak4LPJEeGc8OUUGPyhig" id="(0.9302325581395349,0.46511627906976744)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_foHUQLPREeGc8OUUGPyhig" id="(0.01,0.36)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_hHZVsLPREeGc8OUUGPyhig" type="4001" element="_hHXggLPREeGc8OUUGPyhig" source="_UObfMLPREeGc8OUUGPyhig" target="_YmBDsLklEeGODqpr_sxD9g" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_hHZ8wLPREeGc8OUUGPyhig" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_hHZ8wbPREeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_hHZ8wrPREeGc8OUUGPyhig" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_hHZ8w7PREeGc8OUUGPyhig" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_hHZVsbPREeGc8OUUGPyhig" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_hHZVsrPREeGc8OUUGPyhig" points="[0, 1, -268, -11]$[253, 1, -15, -11]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_hHbK4LPREeGc8OUUGPyhig" id="(1.0,0.58)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_iXT3cLbcEeGODqpr_sxD9g" id="(0.18604651162790697,0.5348837209302325)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_u3d6gLYaEeGDGaBo_BMnhQ" type="4001" element="_u3a3MLYaEeGDGaBo_BMnhQ" source="_p4h7ULYaEeGDGaBo_BMnhQ" target="_u3UJgLYaEeGDGaBo_BMnhQ" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_u3ehkLYaEeGDGaBo_BMnhQ" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_u3fIoLYaEeGDGaBo_BMnhQ" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_u3fIobYaEeGDGaBo_BMnhQ" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_u3fIorYaEeGDGaBo_BMnhQ" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_u3d6gbYaEeGDGaBo_BMnhQ" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_u3d6grYaEeGDGaBo_BMnhQ" points="[0, 22, -252, -125]$[0, 146, -252, -1]$[202, 146, -50, -1]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_yvAMwLYaEeGDGaBo_BMnhQ" type="4001" element="_yu9JcLYaEeGDGaBo_BMnhQ" source="_u3UJgLYaEeGDGaBo_BMnhQ" target="_YmBDsLklEeGODqpr_sxD9g" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_yvAz0LYaEeGDGaBo_BMnhQ" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_yvAz0bYaEeGDGaBo_BMnhQ" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_yvAz0rYaEeGDGaBo_BMnhQ" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_yvAz07YaEeGDGaBo_BMnhQ" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_yvAMwbYaEeGDGaBo_BMnhQ" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_yvAMwrYaEeGDGaBo_BMnhQ" points="[0, 0, -273, 93]$[272, 0, -1, 93]$[272, -76, -1, 17]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_yvDQELYaEeGDGaBo_BMnhQ" id="(1.0,0.6)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_kM1OoLbcEeGODqpr_sxD9g" id="(0.18604651162790697,0.9069767441860465)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_k0LigLbcEeGODqpr_sxD9g" type="4001" element="_k0GC8LbcEeGODqpr_sxD9g" source="_YmBDsLklEeGODqpr_sxD9g" target="_xujTUJKiEeGq74KY17GRVQ" roundedBendpointsRadius="10" routing="Rectilinear">
+      <children xmi:type="notation:DecorationNode" xmi:id="_k0MwoLbcEeGODqpr_sxD9g" type="6001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_k0MwobbcEeGODqpr_sxD9g" y="-10"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_k0NXsLbcEeGODqpr_sxD9g" visible="false" type="6002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_k0NXsbbcEeGODqpr_sxD9g" y="-10"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_k0LigbbcEeGODqpr_sxD9g" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_k0LigrbcEeGODqpr_sxD9g" points="[-8, 0, -226, 11]$[203, 1, -15, 12]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k0PM4LbcEeGODqpr_sxD9g" id="(1.0,0.6511627906976745)"/>
+    </edges>
+  </notation:Diagram>
+</xmi:XMI>

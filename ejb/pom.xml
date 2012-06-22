@@ -94,21 +94,6 @@
               </resources>
             </configuration>
           </execution>
-          <execution>
-            <id>copy-resources-Process</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/resources/process</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
 
@@ -126,7 +111,216 @@
           <ejbVersion>3.0</ejbVersion>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>dependences pour process</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.ow2.jonas.jpaas.jpaas-manager-api</groupId>
+                  <artifactId>jpaas-manager-api</artifactId>
+                  <version>1.0.0-SNAPSHOT</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                  <artifactId>application-manager-ejb</artifactId>
+                  <groupId>org.ow2.jonas.jpaas.jpaas-application-manager</groupId>
+                  <version>1.0.0-SNAPSHOT</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>common</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-node-template-external-db</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-node-template-jk</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-node-template-jonas</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-topology-connector</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-topology-datasource</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
+                   <artifactId>environment-template-core</artifactId>
+                   <version>1.0-SNAPSHOT</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.util</groupId>
+                   <artifactId>util-i18n</artifactId>
+                   <version>1.0.18</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.util</groupId>
+                   <artifactId>util-log</artifactId>
+                   <version>1.0.35</version>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/process/libs</outputDirectory>
+                </artifactItem>
+
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>copy bonita.jar don't find in repository ????</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/process/provided-libs</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/process/provided-libs/</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy connector process bonita files</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/process/connectors</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/process/connectors/</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy files of the bonita  process</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/process</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/process/</directory>
+                  <includes>
+                    <include>*rocess*.*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+              <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.3</version>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <zip basedir="${project.build.directory}/process" destfile="${project.build.outputDirectory}/CreateEnvironment--1.0.bar">
+                </zip>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
+
+
+
 
 </project>

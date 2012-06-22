@@ -30,7 +30,7 @@
       <!-- 
           Router : Apache / Jk
        -->
-      <jk:jk-node-template type="router" name="myrouter" id="n1">
+      <jk:node-template type="router" name="myrouter" id="n1">
          <jk:configuration>
             <jk:jk-ref>apache-2.2-jk-1.2.25</jk:jk-ref> <!-- points to a catalog entry -->
          </jk:configuration>
@@ -40,12 +40,12 @@
             <jk:elasticity min="1" max="1" />
          </jk:sla-enforcement>
 
-      </jk:jk-node-template>
+      </jk:node-template>
       
       <!-- 
           Container : JOnAS
        -->
-      <jonas:jonas-node-template type="container" name="myjonas1" id="n2">
+      <jonas:node-template type="container" name="myjonas1" id="n2">
 
          <jonas:configuration>
             <jonas:java-ref>openjdk-1.6</jonas:java-ref> <!-- points to a catalog entry -->
@@ -86,22 +86,22 @@
                </jonas:scaling-rules>
             </jonas:elasticity>
          </jonas:sla-enforcement>
-      </jonas:jonas-node-template>
+      </jonas:node-template>
 
       <!-- 
           Relationship : connector  
         -->
-      <connector:connector-relationship-template name="router2container" id="r1">
+      <connector:relationship-template name="router2container" id="r1">
          <connector:router id="n1"/>
          <connector:container id="n2"/>
          <connector:configuration/>
-      </connector:connector-relationship-template>
+      </connector:relationship-template>
       
          
       <!-- Database : external database 
            External database means database not manged by JPaaS, eg. hosted in another cloud
         -->
-      <external-db:external-db-node-template type="database" name="mydb1" id="n3">
+      <external-db:node-template type="database" name="mydb1" id="n3">
          <external-db:configuration>
             <external-db:driver-location>http://jdbc.postgresql.org/download/postgresql-9.1-901.jdbc4.jar</external-db:driver-location>
             <external-db:url>url</external-db:url>
@@ -109,18 +109,18 @@
             <external-db:user>user</external-db:user>
             <external-db:pwd>password</external-db:pwd>
          </external-db:configuration>
-      </external-db:external-db-node-template>
+      </external-db:node-template>
        
       <!-- 
           Relationship : data source  
         -->
-      <datasource:datasource-relationship-template name="container2database" id="r2">
+      <datasource:relationship-template name="container2database" id="r2">
          <datasource:container id="n2"/>
          <datasource:database id="n3"/>
          <datasource:configuration>
             <datasource:jndi>jdbc_1</datasource:jndi>
          </datasource:configuration>
-      </datasource:datasource-relationship-template>
+      </datasource:relationship-template>
 
    </topology-template>
   
