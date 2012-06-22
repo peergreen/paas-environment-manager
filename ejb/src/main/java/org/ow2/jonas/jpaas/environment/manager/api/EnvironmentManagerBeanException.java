@@ -22,7 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jonas.jpaas.environment;
+package org.ow2.jonas.jpaas.environment.manager.api;
 
 public class EnvironmentManagerBeanException extends Exception {
 

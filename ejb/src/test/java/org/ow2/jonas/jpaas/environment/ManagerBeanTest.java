@@ -38,6 +38,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Hashtable;
 
+import org.ow2.jonas.jpaas.environment.manager.api.*;
+import org.ow2.jonas.jpaas.environment.manager.bean.*;
+
 
 public class ManagerBeanTest {
 

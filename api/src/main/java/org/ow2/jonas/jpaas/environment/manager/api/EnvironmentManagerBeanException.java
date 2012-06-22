@@ -22,8 +22,14 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jonas.jpaas.environment;
+package org.ow2.jonas.jpaas.environment.manager.api;
 
-public interface EnvironmentManagerRemote extends EnvironmentManagerLocal {
+public class EnvironmentManagerBeanException extends Exception {
+
+   public EnvironmentManagerBeanException() {}
+
+   public EnvironmentManagerBeanException(String message) {
+     super(message);
+   }
 
 }
