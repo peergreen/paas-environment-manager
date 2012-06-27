@@ -67,26 +67,6 @@
   <build>
     <plugins>
 	
-	 <plugin>
-	    <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>copy-api-bundles</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-			  <includeArtifactIds>environment-manager-api</includeArtifactIds>
-              <outputDirectory> ${project.build.directory}/${project.artifactId}-${project.version}/bundle</outputDirectory>       
-            </configuration>
-          </execution>
-       
-        </executions>
-      </plugin>
-	
      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
