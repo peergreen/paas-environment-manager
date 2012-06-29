@@ -36,6 +36,7 @@ import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
 import org.ow2.bonita.util.SimpleCallbackHandler;
+import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
 import org.ow2.jonas.jpaas.manager.api.Environment;
 
@@ -57,13 +58,12 @@ import java.util.Map;
 import java.util.concurrent.Future;
 
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerBeanException;
-import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerLocal ;
-import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerRemote;
+import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 
 @Stateless(mappedName="EnvironmentManagerBean")
-@Local(EnvironmentManagerLocal.class)
-@Remote(EnvironmentManagerRemote.class)
-public class EnvironmentManagerBean {
+@Local(EnvironmentManager.class)
+@Remote(EnvironmentManager.class)
+public class EnvironmentManagerBean implements EnvironmentManager {
 
   private QueryDefinitionAPI queryDefinitionAPI;
   private RuntimeAPI runtimeAPI;

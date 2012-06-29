@@ -52,8 +52,6 @@
 
   <modules>
     <module>ejb</module>
-    <module>ear</module>
-	<module>api</module>
   </modules>
 
   <scm>

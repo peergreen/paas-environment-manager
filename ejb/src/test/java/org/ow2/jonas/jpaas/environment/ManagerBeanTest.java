@@ -39,7 +39,6 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import org.ow2.jonas.jpaas.environment.manager.api.*;
-import org.ow2.jonas.jpaas.environment.manager.bean.*;
 
 
 public class ManagerBeanTest {
@@ -61,9 +60,9 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    EnvironmentManagerRemote statefulBean = null;
+    EnvironmentManager statefulBean = null;
     try {
-      statefulBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+      statefulBean = (EnvironmentManager) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
       Assert.fail("Cannot get Bean: " + e);
     }
@@ -83,8 +82,8 @@ public class ManagerBeanTest {
 
   class BasicThread1 extends Thread {
 
-    EnvironmentManagerRemote envBean;
-    BasicThread1(EnvironmentManagerRemote bean) {
+    EnvironmentManager envBean;
+    BasicThread1(EnvironmentManager bean) {
       this.envBean = bean;
     }
 
@@ -111,9 +110,9 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    EnvironmentManagerRemote envBean = null;
+    EnvironmentManager envBean = null;
     try {
-      envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+      envBean = (EnvironmentManager) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
       Assert.fail("Cannot get Bean: " + e);
     }
@@ -139,9 +138,9 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    EnvironmentManagerRemote envBean = null;
+    EnvironmentManager envBean = null;
     try {
-      envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+      envBean = (EnvironmentManager) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
       Assert.fail("Cannot get Bean: " + e);
     }
@@ -167,9 +166,9 @@ public class ManagerBeanTest {
      } catch (NamingException e) {
         Assert.fail("Cannot get InitialContext: " + e);
      }
-     EnvironmentManagerRemote envBean = null;
+     EnvironmentManager envBean = null;
      try {
-       envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+       envBean = (EnvironmentManager) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
      } catch (NamingException e) {
        Assert.fail("Cannot get Bean: " + e);
      }
@@ -196,9 +195,9 @@ public class ManagerBeanTest {
     } catch (NamingException e) {
        Assert.fail("Cannot get InitialContext: " + e);
     }
-    EnvironmentManagerRemote envBean = null;
+    EnvironmentManager envBean = null;
     try {
-      envBean = (EnvironmentManagerRemote) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
+      envBean = (EnvironmentManager) initialContext.lookup(DEFAULT_EJB_NAME_REMOTE_ENVIRONMENT_MANAGER);
     } catch (NamingException e) {
       Assert.fail("Cannot get Bean: " + e);
     }
