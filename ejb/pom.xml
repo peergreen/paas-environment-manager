@@ -86,6 +86,11 @@
       <artifactId>easybeans-osgi-annotations</artifactId>
       <version>1.2.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
+      <version>1.0.34-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

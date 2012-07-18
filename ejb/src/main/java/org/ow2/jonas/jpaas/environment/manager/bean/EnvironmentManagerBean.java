@@ -44,6 +44,8 @@ import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerBeanException;
 import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
 import org.ow2.jonas.jpaas.manager.api.Environment;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 import javax.annotation.Resource;
 import javax.ejb.Local;
@@ -70,6 +72,11 @@ import java.util.concurrent.Future;
 @Remote(EnvironmentManager.class)
 public class EnvironmentManagerBean implements EnvironmentManager {
 
+  /**
+  * The logger
+  */
+  private Log logger = LogFactory.getLog(EnvironmentManagerBean.class);
+
   private QueryDefinitionAPI queryDefinitionAPI;
   private RuntimeAPI runtimeAPI;
   private ManagementAPI managementAPI;
@@ -94,7 +101,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     final Map param = new HashMap();
     param.put("environmentTemplateDescriptor", environmentTemplateDescriptor);
     try {
-      System.out.println("JPAAS-ENVIRONMENT-MANAGER / createEnvironment called : " + environmentTemplateDescriptor);
+      logger.info("JPAAS-ENVIRONMENT-MANAGER / createEnvironment called : " + environmentTemplateDescriptor);
       login();
       // deploy process if necessary
       deployProcess(subProcessRouterCreateEnvironment);
@@ -118,9 +125,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
               InstanceState state = processInstance.getInstanceState();
               while (state != InstanceState.STARTED) {
                 state = processInstance.getInstanceState();
-                System.out.println("ATTENTE PROCESS STATE != STARTED");
               }
-              System.out.println("PROCESS STATE == " + InstanceState.STARTED);
               if (state == InstanceState.ABORTED)
                 throw (new EnvironmentManagerBeanException("Error during execution of processus (state = ABORTED)"));
               else if (state == InstanceState.CANCELLED)
@@ -147,19 +152,19 @@ public class EnvironmentManagerBean implements EnvironmentManager {
       }
     } finally {
       logout();
-      System.out.println("JPAAS-ENVIRONMENT-MANAGER / createEnvironment finished");
+      logger.info("JPAAS-ENVIRONMENT-MANAGER / createEnvironment finished");
     }
   }
 
   public void deleteEnvironment(String envid) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called");
   }
 
   public List<Environment> findEnvironments() {
     //TODO
 
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
 
     ArrayList<Environment> listEnv = new ArrayList<Environment>();
 
@@ -205,44 +210,43 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     listEnv.add(env1);
     listEnv.add(env2);
 
-
     return listEnv;
 
   }
 
   public Future<Environment> startEnvironment(String envId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
     return null;
   }
 
   public Future<Environment> stopEnvironment(String envId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
     return null;
   }
 
   public Future<ApplicationVersionInstance> deployApplication(String envId, String appId, String versionId, String instanceId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / deployApplication called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / deployApplication called");
     return null;
   }
 
   public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId, String versionId, String instanceId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / undeployApplication called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / undeployApplication called");
     return null;
   }
 
   public Environment getEnvironment(String envId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / getEnvironment called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / getEnvironment called");
     return null;
   }
 
   public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId) {
     //TODO
-    System.out.println("JPAAS-ENVIRONMENT-MANAGER / getDeployedApplicationVersionInstance called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / getDeployedApplicationVersionInstance called");
     return null;
   }
 
@@ -293,7 +297,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
       ProcessDefinition p = queryDefinitionAPI.getProcess(businessArchive.getProcessDefinition().getUUID());
       return p.getUUID();
     } catch (ProcessNotFoundException e) {
-      System.out.println("Deploy the process " + businessArchive.getProcessDefinition().getName());
+      logger.info("Deploy the process " + businessArchive.getProcessDefinition().getName());
       final ProcessDefinition process = managementAPI.deploy(businessArchive); //deployJar
       return process.getUUID();
     }
@@ -304,7 +308,6 @@ public class EnvironmentManagerBean implements EnvironmentManager {
 
     System.setProperty(BonitaConstants.API_TYPE_PROPERTY, "EJB3");
     System.setProperty(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_INITIAL_CONTEXT_FACTORY);
-    System.out.println("AccessorUtil.getQueryDefinitionAPI().toString()) : " + AccessorUtil.getQueryDefinitionAPI().getClass().toString());
     queryDefinitionAPI = AccessorUtil.getQueryDefinitionAPI();
     runtimeAPI = AccessorUtil.getRuntimeAPI();
     managementAPI = AccessorUtil.getManagementAPI();
