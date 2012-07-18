@@ -60,9 +60,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-@Stateless(mappedName="EnvironmentManagerBean")
+@Stateless(mappedName = "EnvironmentManagerBean")
 @Local(EnvironmentManager.class)
 @Remote(EnvironmentManager.class)
 public class EnvironmentManagerBean implements EnvironmentManager {
@@ -76,64 +79,73 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   private LoginContext loginContext = null;
 
   @Resource(name = "processNameAndVersionCreateEnvironment")
-  private String processNameAndVersionCreateEnvironment = "CreateEnvironment--1.0.bar";  // default value overrides by specific deployment descritor value
-  private String subProcessNameAndVersionCreateEnvironment = "InstanciateRouter--1.0.bar";
+  private String processCreateEnvironment = "CreateEnvironment--1.0.bar";  // default value overrides by specific deployment descritor value
+  private String subProcessRouterCreateEnvironment = "InstanciateRouter--1.0.bar";
+  private String subProcessContainerCreateEnvironment = "InstanciateContainer--1.0.bar";
+  private String subProcessDBCreateEnvironment = "InstanciateDatabase--1.0.bar";
 
   public EnvironmentManagerBean() throws EnvironmentManagerBeanException {
-     login();
-     initEnv();
-     logout();
+    login();
+    initEnv();
+    logout();
   }
 
-  public Environment createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException {
+  public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException {
     final Map param = new HashMap();
+    param.put("environmentTemplateDescriptor", environmentTemplateDescriptor);
     try {
       System.out.println("JPAAS-ENVIRONMENT-MANAGER / createEnvironment called : " + environmentTemplateDescriptor);
       login();
       // deploy process if necessary
-      deploySubProcessCreateEnvironment(subProcessNameAndVersionCreateEnvironment);
-      deployProcessCreateEnvironment();
-
-      param.put("environmentTemplateDescriptor", environmentTemplateDescriptor);
+      deployProcess(subProcessRouterCreateEnvironment);
+      deployProcess(subProcessContainerCreateEnvironment);
+      deployProcess(subProcessDBCreateEnvironment);
+      deployProcess(processCreateEnvironment);
 
       if (uuidProcessCreateEnvironnement != null) {
+        ExecutorService es = Executors.newFixedThreadPool(3);
+        final Future<Environment> future = es.submit(new Callable<Environment>() {
+          public Environment call() throws Exception {
+            try {
+              login();
+              uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement, param);
+              Environment env = new Environment();
 
-//         ExecutorService es = Executors.newFixedThreadPool(3);
-//         final Future<Environment> future = es.submit(new Callable() {
-//                    public Object call() throws Exception {
-                        uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement, param);
-                        Environment env = new Environment();
+              env.setEnvId(uuidInstance.getValue());
 
-                        env.setEnvId(uuidInstance.getValue());
-
-                        // wait until processInstance is finished
-                        ProcessInstance processInstance = queryRuntimeAPI.getProcessInstance(uuidInstance);
-                        InstanceState state = processInstance.getInstanceState();
-                        while (state != InstanceState.STARTED) {
-                          state = processInstance.getInstanceState();
-                        }
-                        return env;
-//                    }
-//         });
-//         return future;
+              // wait until processInstance is finished
+              ProcessInstance processInstance = queryRuntimeAPI.getProcessInstance(uuidInstance);
+              InstanceState state = processInstance.getInstanceState();
+              while (state != InstanceState.STARTED) {
+                state = processInstance.getInstanceState();
+                System.out.println("ATTENTE PROCESS STATE != STARTED");
+              }
+              System.out.println("PROCESS STATE == " + InstanceState.STARTED);
+              if (state == InstanceState.ABORTED)
+                throw (new EnvironmentManagerBeanException("Error during execution of processus (state = ABORTED)"));
+              else if (state == InstanceState.CANCELLED)
+                throw (new EnvironmentManagerBeanException("Error during execution of processus (state = CANCELLED)"));
+              // The state of processus is FINISHED
+              return env;
+            } catch (ProcessNotFoundException e) {
+              e.printStackTrace();
+              throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, process not found"));
+            } catch (org.ow2.bonita.facade.exception.VariableNotFoundException e) {
+              e.printStackTrace();
+              throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, variable not found"));
+            } catch (InstanceNotFoundException e) {
+              e.printStackTrace();
+              throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, instance not found"));
+            }  finally {
+              logout();
+            }
+          }
+        });
+        return future;
+      } else {
+        throw (new EnvironmentManagerBeanException("process CreateEnvironment can't be deploy on server..."));
       }
-      else {
-         throw (new EnvironmentManagerBeanException("process CreateEnvironment can't be deploy on server..."));
-      }
-    } catch (ProcessNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    } catch (org.ow2.bonita.facade.exception.VariableNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    } catch (EnvironmentManagerBeanException e) {
-      e.printStackTrace();
-      throw (new EnvironmentManagerBeanException("Error during deployment of the process CreateEnvironment"));
-    } catch (InstanceNotFoundException e) {
-      e.printStackTrace();
-      throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, instance not found"));
-
-    }finally {
+    } finally {
       logout();
       System.out.println("JPAAS-ENVIRONMENT-MANAGER / createEnvironment finished");
     }
@@ -145,57 +157,57 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   }
 
   public List<Environment> findEnvironments() {
-      //TODO
-	  
-	  System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
+    //TODO
 
-	  ArrayList <Environment> listEnv=new ArrayList <Environment>();
-	  
-	  //1rst environment 
-	  Environment env1=new Environment();
-	  env1.setEnvId("156");
-	  env1.setEnvName("My first environment");
+    System.out.println("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
+
+    ArrayList<Environment> listEnv = new ArrayList<Environment>();
+
+    //1rst environment
+    Environment env1 = new Environment();
+    env1.setEnvId("156");
+    env1.setEnvName("My first environment");
 //	  env1.setState(Environment.ENVIRONMENT_RUNNING);
-	  
-	  ApplicationVersionInstance instance1=new ApplicationVersionInstance();
-	  instance1.setInstanceId("196");
-	  instance1.setInstanceName("1rst instance of the 1rst environment");
+
+    ApplicationVersionInstance instance1 = new ApplicationVersionInstance();
+    instance1.setInstanceId("196");
+    instance1.setInstanceName("1rst instance of the 1rst environment");
 //	  instance1.setState(ApplicationVersionInstance.INSTANCE_STARTED);
-	  
-	  ApplicationVersionInstance instance2=new ApplicationVersionInstance();
-	  instance2.setInstanceId("638");
-	  instance2.setInstanceName("2nd instance of the 1rst environment");
+
+    ApplicationVersionInstance instance2 = new ApplicationVersionInstance();
+    instance2.setInstanceId("638");
+    instance2.setInstanceName("2nd instance of the 1rst environment");
 //	  instance2.setState(ApplicationVersionInstance.INSTANCE_RUNNING);
-	 
-	  env1.getListApplicationVersionInstance().add(instance1);
-	  env1.getListApplicationVersionInstance().add(instance2);
-	  
-	  //2nd environment
-	  Environment env2=new Environment();
-	  env2.setEnvId("654");
-	  env2.setEnvName("My second environment");
+
+    env1.getListApplicationVersionInstance().add(instance1);
+    env1.getListApplicationVersionInstance().add(instance2);
+
+    //2nd environment
+    Environment env2 = new Environment();
+    env2.setEnvId("654");
+    env2.setEnvName("My second environment");
 //	  env2.setState(Environment.ENVIRONMENT_STOPPED);
-	  
-	  ApplicationVersionInstance instance3=new ApplicationVersionInstance();
-	  instance3.setInstanceId("789");
-	  instance3.setInstanceName("1rst instance of the 2nd environment");
+
+    ApplicationVersionInstance instance3 = new ApplicationVersionInstance();
+    instance3.setInstanceId("789");
+    instance3.setInstanceName("1rst instance of the 2nd environment");
 //	  instance3.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-	  
-	  ApplicationVersionInstance instance4=new ApplicationVersionInstance();
-	  instance4.setInstanceId("256");
-	  instance4.setInstanceName("2nd instance of the 2nd environment");
+
+    ApplicationVersionInstance instance4 = new ApplicationVersionInstance();
+    instance4.setInstanceId("256");
+    instance4.setInstanceName("2nd instance of the 2nd environment");
 ///	  instance4.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-	  
-	  env2.getListApplicationVersionInstance().add(instance3);
-	  env2.getListApplicationVersionInstance().add(instance4);
-	  
-	  //add all environments in the list
-	  listEnv.add(env1);
-	  listEnv.add(env2);
-	  
-	  
-      return listEnv; 
- 
+
+    env2.getListApplicationVersionInstance().add(instance3);
+    env2.getListApplicationVersionInstance().add(instance4);
+
+    //add all environments in the list
+    listEnv.add(env1);
+    listEnv.add(env2);
+
+
+    return listEnv;
+
   }
 
   public Future<Environment> startEnvironment(String envId) {
@@ -210,13 +222,13 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     return null;
   }
 
-  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId) {
+  public Future<ApplicationVersionInstance> deployApplication(String envId, String appId, String versionId, String instanceId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / deployApplication called");
     return null;
   }
 
-  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId) {
+  public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId, String versionId, String instanceId) {
     //TODO
     System.out.println("JPAAS-ENVIRONMENT-MANAGER / undeployApplication called");
     return null;
@@ -234,34 +246,10 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     return null;
   }
 
-  private boolean deploySubProcessCreateEnvironment(String subProcessName) {
+  private boolean deployProcess(String processName) {
     final File tempFileBarProcess;
     try {
-      URL processBar = EnvironmentManagerBean.class.getClassLoader().getResource(subProcessName);
-      tempFileBarProcess = createTempFileBar(processBar);
-      BusinessArchive businessArchive = BusinessArchiveFactory.getBusinessArchive(tempFileBarProcess);
-      uuidProcessCreateEnvironnement = deployBarFile(businessArchive);
-      return true;
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      return false;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return false;
-    } catch (EnvironmentManagerBeanException e) {
-      e.printStackTrace();
-      return false;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
-
-  private boolean deployProcessCreateEnvironment() {
-    final File tempFileBarProcess;
-    try {
-      URL processBar = EnvironmentManagerBean.class.getClassLoader().getResource(processNameAndVersionCreateEnvironment);
+      URL processBar = EnvironmentManagerBean.class.getClassLoader().getResource(processName);
       tempFileBarProcess = createTempFileBar(processBar);
       BusinessArchive businessArchive = BusinessArchiveFactory.getBusinessArchive(tempFileBarProcess);
       uuidProcessCreateEnvironnement = deployBarFile(businessArchive);

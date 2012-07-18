@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public interface EnvironmentManager {
-  public Environment createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException;
+  public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException;
   public void deleteEnvironment(String envid);
   public List<Environment> findEnvironments();
   public Future<Environment> startEnvironment(String envId);
