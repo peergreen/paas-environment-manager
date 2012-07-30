@@ -219,8 +219,8 @@
                 </artifactItem>
 
                 <artifactItem>
-                    <groupId>org.ow2.jonas.jpaas</groupId>
-                    <artifactId>resource-pool-api</artifactId>
+                    <groupId>org.ow2.jonas.jpaas.resource-pool</groupId>
+                    <artifactId>resource-pool-ejb</artifactId>
                     <version>1.0.0-SNAPSHOT</version>
 
                    <type>jar</type>
@@ -237,6 +237,16 @@
                    <overWrite>true</overWrite>
                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs</outputDirectory>
                 </artifactItem>
+
+                <artifactItem>
+                   <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
+                   <version>1.1.1-SNAPSHOT</version>
+                   <artifactId>system-representation-vo</artifactId>
+
+                   <type>jar</type>
+                   <overWrite>true</overWrite>
+                   <outputDirectory>${project.build.directory}/processCreateEnvironment/libs</outputDirectory>
+               </artifactItem>
 
                  <artifactItem>
                     <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
