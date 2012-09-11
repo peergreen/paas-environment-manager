@@ -81,7 +81,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   private RuntimeAPI runtimeAPI;
   private ManagementAPI managementAPI;
   private QueryRuntimeAPI queryRuntimeAPI;
-  private ProcessDefinitionUUID uuidProcessCreateEnvironnement = null;
+  private ProcessDefinitionUUID uuidProcessCreateEnvironment = null;
   private ProcessInstanceUUID uuidInstance = null;
   private LoginContext loginContext = null;
 
@@ -107,15 +107,15 @@ public class EnvironmentManagerBean implements EnvironmentManager {
       deployProcess(subProcessRouterCreateEnvironment);
       deployProcess(subProcessContainerCreateEnvironment);
       deployProcess(subProcessDBCreateEnvironment);
-      deployProcess(processCreateEnvironment);
+      uuidProcessCreateEnvironment = deployProcess(processCreateEnvironment);
 
-      if (uuidProcessCreateEnvironnement != null) {
+      if (uuidProcessCreateEnvironment != null) {
         ExecutorService es = Executors.newFixedThreadPool(3);
         final Future<Environment> future = es.submit(new Callable<Environment>() {
           public Environment call() throws Exception {
             try {
               login();
-              uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironnement, param);
+              uuidInstance = runtimeAPI.instantiateProcess(uuidProcessCreateEnvironment, param);
               Environment env = new Environment();
 
               env.setEnvId(uuidInstance.getValue());
@@ -250,27 +250,24 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     return null;
   }
 
-  private boolean deployProcess(String processName) {
+  private ProcessDefinitionUUID deployProcess(String processName) {
     final File tempFileBarProcess;
+    ProcessDefinitionUUID result = null;
     try {
       URL processBar = EnvironmentManagerBean.class.getClassLoader().getResource(processName);
       tempFileBarProcess = createTempFileBar(processBar);
       BusinessArchive businessArchive = BusinessArchiveFactory.getBusinessArchive(tempFileBarProcess);
-      uuidProcessCreateEnvironnement = deployBarFile(businessArchive);
-      return true;
+      result = deployBarFile(businessArchive);
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
-      return false;
     } catch (IOException e) {
       e.printStackTrace();
-      return false;
     } catch (EnvironmentManagerBeanException e) {
       e.printStackTrace();
-      return false;
     } catch (Exception e) {
       e.printStackTrace();
-      return false;
     }
+      return result;
   }
 
   private File createTempFileBar(URL processBar) throws IOException {

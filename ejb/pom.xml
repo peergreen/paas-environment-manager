@@ -297,7 +297,7 @@
             <Export-Package>org.ow2.jonas.jpaas.environment.manager.api</Export-Package>
             <Import-Package>!com.thoughtworks.*,!org.jboss.*,!org.apache.tools.ant,!org.apache.tools.ant.*,!org.ow2.util.asm,*</Import-Package>
             <Private-Package>org.ow2.jonas.jpaas.environment.manager.bean</Private-Package>
-            <Include-Resource>${project.basedir}/src/process/CreateEnvironment/CreateEnvironment--1.0.bar,
+            <Include-Resource>{maven-resources},${project.basedir}/src/process/CreateEnvironment/CreateEnvironment--1.0.bar,
               ${project.basedir}/src/process/CreateEnvironment/InstanciateRouter--1.0.bar,
               ${project.basedir}/src/process/CreateEnvironment/InstanciateDatabase--1.0.bar,
               ${project.basedir}/src/process/CreateEnvironment/InstanciateContainer--1.0.bar,
