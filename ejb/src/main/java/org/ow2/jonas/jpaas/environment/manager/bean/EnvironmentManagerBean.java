@@ -151,7 +151,6 @@ public class EnvironmentManagerBean implements EnvironmentManager {
         throw (new EnvironmentManagerBeanException("process CreateEnvironment can't be deploy on server..."));
       }
     } finally {
-      logout();
       logger.info("JPAAS-ENVIRONMENT-MANAGER / createEnvironment finished");
     }
   }
