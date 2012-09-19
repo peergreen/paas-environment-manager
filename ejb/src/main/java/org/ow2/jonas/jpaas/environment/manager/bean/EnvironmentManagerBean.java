@@ -30,12 +30,10 @@ import org.ow2.bonita.facade.QueryRuntimeAPI;
 import org.ow2.bonita.facade.RuntimeAPI;
 import org.ow2.bonita.facade.def.element.BusinessArchive;
 import org.ow2.bonita.facade.def.majorElement.ProcessDefinition;
-import org.ow2.bonita.facade.exception.InstanceNotFoundException;
 import org.ow2.bonita.facade.exception.ProcessNotFoundException;
-import org.ow2.bonita.facade.runtime.InstanceState;
-import org.ow2.bonita.facade.runtime.ProcessInstance;
 import org.ow2.bonita.facade.uuid.ProcessDefinitionUUID;
 import org.ow2.bonita.facade.uuid.ProcessInstanceUUID;
+import org.ow2.bonita.light.LightProcessInstance;
 import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
@@ -60,8 +58,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,14 +73,15 @@ import java.util.concurrent.Future;
 public class EnvironmentManagerBean implements EnvironmentManager {
 
   /**
-  * The logger
-  */
+   * The logger
+   */
   private Log logger = LogFactory.getLog(EnvironmentManagerBean.class);
 
   private QueryDefinitionAPI queryDefinitionAPI;
   private RuntimeAPI runtimeAPI;
   private ManagementAPI managementAPI;
   private QueryRuntimeAPI queryRuntimeAPI;
+  private QueryRuntimeAPI queryRuntimeAPIHistory;
   private ProcessDefinitionUUID uuidProcessCreateEnvironment = null;
   private ProcessInstanceUUID uuidInstance = null;
   private LoginContext loginContext = null;
@@ -119,18 +120,19 @@ public class EnvironmentManagerBean implements EnvironmentManager {
               Environment env = new Environment();
 
               env.setEnvId(uuidInstance.getValue());
+              env.setState(Environment.ENVIRONMENT_RUNNING);
 
               // wait until processInstance is finished
-              ProcessInstance processInstance = queryRuntimeAPI.getProcessInstance(uuidInstance);
-              InstanceState state = processInstance.getInstanceState();
-              while (state != InstanceState.STARTED) {
-                state = processInstance.getInstanceState();
-              }
-              if (state == InstanceState.ABORTED)
-                throw (new EnvironmentManagerBeanException("Error during execution of processus (state = ABORTED)"));
-              else if (state == InstanceState.CANCELLED)
-                throw (new EnvironmentManagerBeanException("Error during execution of processus (state = CANCELLED)"));
-              // The state of processus is FINISHED
+              Set<LightProcessInstance> lightProcessInstances = queryRuntimeAPIHistory.getLightProcessInstances();
+              waitProcessInstanceUUIDIsFinished(uuidInstance);
+
+              // read Variable process instance to detect errors
+              String variableErrorRouteur = (String) queryRuntimeAPIHistory.getProcessInstanceVariable(uuidInstance, "errorCode");
+
+              if (!variableErrorRouteur.equals(""))
+                 env.setState(Environment.ENVIRONMENT_FAILED);
+              else
+                 env.setState(Environment.ENVIRONMENT_STOPPED);
               return env;
             } catch (ProcessNotFoundException e) {
               e.printStackTrace();
@@ -138,10 +140,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
             } catch (org.ow2.bonita.facade.exception.VariableNotFoundException e) {
               e.printStackTrace();
               throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, variable not found"));
-            } catch (InstanceNotFoundException e) {
-              e.printStackTrace();
-              throw (new EnvironmentManagerBeanException("Error during intanciation of the process CreateEnvironment, instance not found"));
-            }  finally {
+            } finally {
               logout();
             }
           }
@@ -266,7 +265,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     } catch (Exception e) {
       e.printStackTrace();
     }
-      return result;
+    return result;
   }
 
   private File createTempFileBar(URL processBar) throws IOException {
@@ -308,6 +307,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     runtimeAPI = AccessorUtil.getRuntimeAPI();
     managementAPI = AccessorUtil.getManagementAPI();
     queryRuntimeAPI = AccessorUtil.getQueryRuntimeAPI();
+    queryRuntimeAPIHistory = AccessorUtil.getQueryRuntimeAPI(AccessorUtil.QUERYLIST_HISTORY_KEY);
   }
 
   private void login() throws EnvironmentManagerBeanException {
@@ -339,5 +339,25 @@ public class EnvironmentManagerBean implements EnvironmentManager {
       e.printStackTrace();
       throw (new EnvironmentManagerBeanException("Error during logout : loginException"));
     }
+  }
+
+  private void waitProcessInstanceUUIDIsFinished(ProcessInstanceUUID uuidInstance) {
+    Set<LightProcessInstance> lightProcessInstances = queryRuntimeAPIHistory.getLightProcessInstances();
+    Iterator iter = lightProcessInstances.iterator();
+    LightProcessInstance processInstanceCurrent = null;
+    boolean processExist = false;
+    while (!processExist) {
+      if (!iter.hasNext()) {
+        lightProcessInstances = queryRuntimeAPIHistory.getLightProcessInstances();
+        iter = lightProcessInstances.iterator();
+      }
+      if (iter.hasNext()) {
+        processInstanceCurrent = (LightProcessInstance) iter.next();
+
+        if (processInstanceCurrent.getProcessInstanceUUID().equals(uuidInstance))
+          processExist = true;
+      }
+    }
+
   }
 }
