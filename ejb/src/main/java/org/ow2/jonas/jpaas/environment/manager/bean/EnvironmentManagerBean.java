@@ -31,6 +31,7 @@ import org.ow2.bonita.facade.RuntimeAPI;
 import org.ow2.bonita.facade.def.element.BusinessArchive;
 import org.ow2.bonita.facade.def.majorElement.ProcessDefinition;
 import org.ow2.bonita.facade.exception.ProcessNotFoundException;
+import org.ow2.bonita.facade.exception.VariableNotFoundException;
 import org.ow2.bonita.facade.uuid.ProcessDefinitionUUID;
 import org.ow2.bonita.facade.uuid.ProcessInstanceUUID;
 import org.ow2.bonita.light.LightProcessInstance;
@@ -45,7 +46,6 @@ import org.ow2.jonas.jpaas.manager.api.Environment;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -66,6 +66,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Stateless(mappedName = "EnvironmentManagerBean")
 @Local(EnvironmentManager.class)
@@ -80,17 +81,13 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   private QueryDefinitionAPI queryDefinitionAPI;
   private RuntimeAPI runtimeAPI;
   private ManagementAPI managementAPI;
-  private QueryRuntimeAPI queryRuntimeAPI;
-  private QueryRuntimeAPI queryRuntimeAPIHistory;
+  private QueryRuntimeAPI queryRuntimeAPI;        // for process not finished
+  private QueryRuntimeAPI queryRuntimeAPIHistory; // for process finished and transfert into history
   private ProcessDefinitionUUID uuidProcessCreateEnvironment = null;
+  private ProcessDefinitionUUID  uuidProcessDeleteEnvironment = null;
   private ProcessInstanceUUID uuidInstance = null;
   private LoginContext loginContext = null;
 
-  @Resource(name = "processNameAndVersionCreateEnvironment")
-  private String processCreateEnvironment = "CreateEnvironment--1.0.bar";  // default value overrides by specific deployment descritor value
-  private String subProcessRouterCreateEnvironment = "InstanciateRouter--1.0.bar";
-  private String subProcessContainerCreateEnvironment = "InstanciateContainer--1.0.bar";
-  private String subProcessDBCreateEnvironment = "InstanciateDatabase--1.0.bar";
 
   public EnvironmentManagerBean() throws EnvironmentManagerBeanException {
     login();
@@ -104,11 +101,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     try {
       logger.info("JPAAS-ENVIRONMENT-MANAGER / createEnvironment called : " + environmentTemplateDescriptor);
       login();
-      // deploy process if necessary
-      deployProcess(subProcessRouterCreateEnvironment);
-      deployProcess(subProcessContainerCreateEnvironment);
-      deployProcess(subProcessDBCreateEnvironment);
-      uuidProcessCreateEnvironment = deployProcess(processCreateEnvironment);
+      deployBarProcess();
 
       if (uuidProcessCreateEnvironment != null) {
         ExecutorService es = Executors.newFixedThreadPool(3);
@@ -154,9 +147,46 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     }
   }
 
-  public void deleteEnvironment(String envid) {
-    //TODO
+  public  Future deleteEnvironment(String envid) throws EnvironmentManagerBeanException {
     logger.info("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called");
+    final Map param = new HashMap();
+    param.put("environmentID", envid);
+    try {
+      logger.info("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called : " + envid);
+      login();
+      deployBarProcess();
+
+      if (uuidProcessDeleteEnvironment != null) {
+          ExecutorService es = Executors.newFixedThreadPool(3);
+        final AtomicReference<Future> future = new AtomicReference<Future>(es.submit(new Callable<Void>() {
+          public Void call() throws Exception {
+            try {
+              login();
+              uuidInstance = runtimeAPI.instantiateProcess(uuidProcessDeleteEnvironment, param);
+
+              // wait until processInstance is finished
+              Set<LightProcessInstance> lightProcessInstances = queryRuntimeAPIHistory.getLightProcessInstances();
+              waitProcessInstanceUUIDIsFinished(uuidInstance);
+
+              return null;
+            } catch (ProcessNotFoundException e) {
+              e.printStackTrace();
+              throw (new EnvironmentManagerBeanException("Error during intanciation of the process deleteEnvironment, process not found"));
+            } catch (VariableNotFoundException e) {
+              e.printStackTrace();
+              throw (new EnvironmentManagerBeanException("Error during intanciation of the process deleteEnvironment, variable not found"));
+            } finally {
+              logout();
+            }
+          }
+        }));
+        return future.get();
+      } else {
+        throw (new EnvironmentManagerBeanException("process DeleteEnvironment can't be deploy on server..."));
+      }
+    } finally {
+      logger.info("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment finished");
+    }
   }
 
   public List<Environment> findEnvironments() {
@@ -246,6 +276,23 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     //TODO
     logger.info("JPAAS-ENVIRONMENT-MANAGER / getDeployedApplicationVersionInstance called");
     return null;
+  }
+
+  // deploy process if necessary
+  private void deployBarProcess() {
+
+    String processCreateEnvironment = "CreateEnvironment--1.0.bar";  // default value overrides by specific deployment descritor value
+    String subProcessRouterCreateEnvironment = "InstanciateRouter--1.0.bar";
+    String subProcessContainerCreateEnvironment = "InstanciateContainer--1.0.bar";
+    String subProcessDBCreateEnvironment = "InstanciateDatabase--1.0.bar";
+    String processDeleteEnvironment = "DeleteEnvironment--1.0.bar";
+
+    deployProcess(subProcessRouterCreateEnvironment);
+    deployProcess(subProcessContainerCreateEnvironment);
+    deployProcess(subProcessDBCreateEnvironment);
+    uuidProcessCreateEnvironment = deployProcess(processCreateEnvironment);
+
+    uuidProcessDeleteEnvironment = deployProcess(processDeleteEnvironment);
   }
 
   private ProcessDefinitionUUID deployProcess(String processName) {

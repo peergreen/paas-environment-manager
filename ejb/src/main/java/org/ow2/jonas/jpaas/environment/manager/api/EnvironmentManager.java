@@ -32,7 +32,7 @@ import java.util.concurrent.Future;
 
 public interface EnvironmentManager {
   public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException;
-  public void deleteEnvironment(String envid);
+  public Future deleteEnvironment(String envid) throws EnvironmentManagerBeanException;
   public List<Environment> findEnvironments();
   public Future<Environment> startEnvironment(String envId);
   public Future<Environment> stopEnvironment(String envId);
