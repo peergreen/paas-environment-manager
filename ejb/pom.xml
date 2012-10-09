@@ -301,6 +301,7 @@
               ${project.basedir}/src/process/CreateEnvironment/InstanciateRouter--1.0.bar,
               ${project.basedir}/src/process/CreateEnvironment/InstanciateDatabase--1.0.bar,
               ${project.basedir}/src/process/CreateEnvironment/InstanciateContainer--1.0.bar,
+              ${project.basedir}/src/process/CreateEnvironment/InstanciateConnector--1.0.bar,
               ${project.basedir}/src/process/DeleteEnvironment/DeleteEnvironment--1.0.bar,
               src/main/resources</Include-Resource>
             <Embed-Dependency>bonita-client</Embed-Dependency>

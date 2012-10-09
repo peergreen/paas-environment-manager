@@ -285,11 +285,13 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     String subProcessRouterCreateEnvironment = "InstanciateRouter--1.0.bar";
     String subProcessContainerCreateEnvironment = "InstanciateContainer--1.0.bar";
     String subProcessDBCreateEnvironment = "InstanciateDatabase--1.0.bar";
+    String subProcessConnectorCreateEnvironment = "InstanciateConnector--1.0.bar";
     String processDeleteEnvironment = "DeleteEnvironment--1.0.bar";
 
     deployProcess(subProcessRouterCreateEnvironment);
     deployProcess(subProcessContainerCreateEnvironment);
     deployProcess(subProcessDBCreateEnvironment);
+    deployProcess(subProcessConnectorCreateEnvironment);
     uuidProcessCreateEnvironment = deployProcess(processCreateEnvironment);
 
     uuidProcessDeleteEnvironment = deployProcess(processDeleteEnvironment);
