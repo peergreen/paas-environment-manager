@@ -216,7 +216,10 @@ public class EnvironmentManagerBean implements EnvironmentManager {
 
     // For this prototype user is defined statically
     List<EnvironmentVO> listEnvVO = envSR.findEnvironments("1");
-    return environmentVOListToEnvironmentList(listEnvVO);
+    if (listEnvVO != null)
+       return environmentVOListToEnvironmentList(listEnvVO);
+    else
+      return new ArrayList<Environment>();
   }
 
   public Future<Environment> startEnvironment(String envId) {
