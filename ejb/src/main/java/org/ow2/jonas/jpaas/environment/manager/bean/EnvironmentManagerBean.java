@@ -39,10 +39,27 @@ import org.ow2.bonita.util.AccessorUtil;
 import org.ow2.bonita.util.BonitaConstants;
 import org.ow2.bonita.util.BusinessArchiveFactory;
 import org.ow2.bonita.util.SimpleCallbackHandler;
+import org.ow2.easybeans.osgi.annotation.OSGiResource;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerBeanException;
 import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
+import org.ow2.jonas.jpaas.manager.api.Connector;
+import org.ow2.jonas.jpaas.manager.api.Datasource;
 import org.ow2.jonas.jpaas.manager.api.Environment;
+import org.ow2.jonas.jpaas.manager.api.ExternalDatabase;
+import org.ow2.jonas.jpaas.manager.api.JkRouter;
+import org.ow2.jonas.jpaas.manager.api.JonasContainer;
+import org.ow2.jonas.jpaas.manager.api.Node;
+import org.ow2.jonas.jpaas.manager.api.Relationship;
+import org.ow2.jonas.jpaas.manager.api.Topology;
+import org.ow2.jonas.jpaas.sr.facade.api.ISrEnvironmentFacade;
+import org.ow2.jonas.jpaas.sr.facade.vo.ConnectorTemplateVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.ContainerNodeTemplateVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.DatabaseNodeTemplateVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.EnvironmentVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.NodeTemplateVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.RelationshipTemplateVO;
+import org.ow2.jonas.jpaas.sr.facade.vo.RouterNodeTemplateVO;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -84,10 +101,12 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   private QueryRuntimeAPI queryRuntimeAPI;        // for process not finished
   private QueryRuntimeAPI queryRuntimeAPIHistory; // for process finished and transfert into history
   private ProcessDefinitionUUID uuidProcessCreateEnvironment = null;
-  private ProcessDefinitionUUID  uuidProcessDeleteEnvironment = null;
+  private ProcessDefinitionUUID uuidProcessDeleteEnvironment = null;
   private ProcessInstanceUUID uuidInstance = null;
   private LoginContext loginContext = null;
 
+  @OSGiResource
+  private ISrEnvironmentFacade envSR;
 
   public EnvironmentManagerBean() throws EnvironmentManagerBeanException {
     login();
@@ -113,7 +132,6 @@ public class EnvironmentManagerBean implements EnvironmentManager {
               Environment env = new Environment();
 
               env.setEnvId(uuidInstance.getValue());
-              env.setState(Environment.ENVIRONMENT_RUNNING);
 
               // wait until processInstance is finished
               Set<LightProcessInstance> lightProcessInstances = queryRuntimeAPIHistory.getLightProcessInstances();
@@ -121,11 +139,13 @@ public class EnvironmentManagerBean implements EnvironmentManager {
 
               // read Variable process instance to detect errors
               String variableErrorRouteur = (String) queryRuntimeAPIHistory.getProcessInstanceVariable(uuidInstance, "errorCode");
+              String environmentID = (String) queryRuntimeAPIHistory.getProcessInstanceVariable(uuidInstance, "environmentID");
+              env.setEnvId(environmentID);
 
               if (!variableErrorRouteur.equals(""))
-                 env.setState(Environment.ENVIRONMENT_FAILED);
+                env.setState(Environment.ENVIRONMENT_FAILED);
               else
-                 env.setState(Environment.ENVIRONMENT_STOPPED);
+                env.setState(Environment.ENVIRONMENT_STOPPED);
               return env;
             } catch (ProcessNotFoundException e) {
               e.printStackTrace();
@@ -147,7 +167,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
     }
   }
 
-  public  Future deleteEnvironment(String envid) throws EnvironmentManagerBeanException {
+  public Future deleteEnvironment(String envid) throws EnvironmentManagerBeanException {
     logger.info("JPAAS-ENVIRONMENT-MANAGER / deleteEnvironment called");
     final Map param = new HashMap();
     param.put("environmentID", envid);
@@ -157,7 +177,7 @@ public class EnvironmentManagerBean implements EnvironmentManager {
       deployBarProcess();
 
       if (uuidProcessDeleteEnvironment != null) {
-          ExecutorService es = Executors.newFixedThreadPool(3);
+        ExecutorService es = Executors.newFixedThreadPool(3);
         final AtomicReference<Future> future = new AtomicReference<Future>(es.submit(new Callable<Void>() {
           public Void call() throws Exception {
             try {
@@ -192,54 +212,14 @@ public class EnvironmentManagerBean implements EnvironmentManager {
   public List<Environment> findEnvironments() {
     //TODO
 
-    logger.info("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called");
+    logger.info("JPAAS-ENVIRONMENT-MANAGER / findEnvironments called JEJE");
 
-    ArrayList<Environment> listEnv = new ArrayList<Environment>();
-
-    //1rst environment
-    Environment env1 = new Environment();
-    env1.setEnvId("156");
-    env1.setEnvName("My first environment");
-//	  env1.setState(Environment.ENVIRONMENT_RUNNING);
-
-    ApplicationVersionInstance instance1 = new ApplicationVersionInstance();
-    instance1.setInstanceId("196");
-    instance1.setInstanceName("1rst instance of the 1rst environment");
-//	  instance1.setState(ApplicationVersionInstance.INSTANCE_STARTED);
-
-    ApplicationVersionInstance instance2 = new ApplicationVersionInstance();
-    instance2.setInstanceId("638");
-    instance2.setInstanceName("2nd instance of the 1rst environment");
-//	  instance2.setState(ApplicationVersionInstance.INSTANCE_RUNNING);
-
-    env1.getListApplicationVersionInstance().add(instance1);
-    env1.getListApplicationVersionInstance().add(instance2);
-
-    //2nd environment
-    Environment env2 = new Environment();
-    env2.setEnvId("654");
-    env2.setEnvName("My second environment");
-//	  env2.setState(Environment.ENVIRONMENT_STOPPED);
-
-    ApplicationVersionInstance instance3 = new ApplicationVersionInstance();
-    instance3.setInstanceId("789");
-    instance3.setInstanceName("1rst instance of the 2nd environment");
-//	  instance3.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-
-    ApplicationVersionInstance instance4 = new ApplicationVersionInstance();
-    instance4.setInstanceId("256");
-    instance4.setInstanceName("2nd instance of the 2nd environment");
-///	  instance4.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
-
-    env2.getListApplicationVersionInstance().add(instance3);
-    env2.getListApplicationVersionInstance().add(instance4);
-
-    //add all environments in the list
-    listEnv.add(env1);
-    listEnv.add(env2);
-
-    return listEnv;
-
+    // For this prototype user is defined statically
+    List<EnvironmentVO> listEnvVO = envSR.findEnvironments("1");
+    if (listEnvVO != null)
+       return environmentVOListToEnvironmentList(listEnvVO);
+    else
+      return new ArrayList<Environment>();
   }
 
   public Future<Environment> startEnvironment(String envId) {
@@ -407,6 +387,73 @@ public class EnvironmentManagerBean implements EnvironmentManager {
           processExist = true;
       }
     }
+  }
 
+  private List<Environment> environmentVOListToEnvironmentList(List<EnvironmentVO> environmentVOList) {
+    List<Environment> resultList = new ArrayList<Environment>();
+    for (EnvironmentVO tmpEnv : environmentVOList) {
+      Environment env = new Environment();
+      env.setEnvId(tmpEnv.getId());
+      env.setEnvName(tmpEnv.getName());
+      env.setEnvDesc(tmpEnv.getDescription());
+
+      List<NodeTemplateVO> nodesTemplateVO = tmpEnv.getTopologyTemplate().getNodeTemplateList();
+      Topology topo = new Topology();
+
+      //Nodes
+      List<Node> nodeList = new ArrayList<Node>();
+      for (NodeTemplateVO tmpNode : nodesTemplateVO) {
+        if (tmpNode instanceof RouterNodeTemplateVO) {
+          JkRouter node = new JkRouter();
+          node.setId(tmpNode.getId());
+          node.setMaxSize(tmpNode.getMaxSize());
+          node.setMinSize(tmpNode.getMinSize());
+          node.setName(tmpNode.getName());
+          node.setCurrentSize(tmpNode.getCurrentSize());
+          nodeList.add(node);
+        } else if (tmpNode instanceof ContainerNodeTemplateVO) {
+          JonasContainer node = new JonasContainer();
+          node.setId(tmpNode.getId());
+          node.setMaxSize(tmpNode.getMaxSize());
+          node.setMinSize(tmpNode.getMinSize());
+          node.setName(tmpNode.getName());
+          node.setCurrentSize(tmpNode.getCurrentSize());
+          nodeList.add(node);
+        } else if (tmpNode instanceof DatabaseNodeTemplateVO) {
+          ExternalDatabase node = new ExternalDatabase();
+          node.setId(tmpNode.getId());
+          node.setMaxSize(tmpNode.getMaxSize());
+          node.setMinSize(tmpNode.getMinSize());
+          node.setName(tmpNode.getName());
+          node.setCurrentSize(tmpNode.getCurrentSize());
+          nodeList.add(node);
+        }
+        topo.setNodeList(nodeList);
+      }
+
+      //RelationShips
+      List<RelationshipTemplateVO> relationShipVO = tmpEnv.getTopologyTemplate().getRelationshipTemplateList();
+      List<Relationship> listRelationShip = new ArrayList<Relationship>();
+      for (RelationshipTemplateVO tmpRel : relationShipVO) {
+        if (tmpRel instanceof ConnectorTemplateVO) {
+          Connector conn = new Connector();
+          conn.setRouterId(tmpRel.getId());
+          conn.setContainerId(tmpRel.getTemplateId());
+          listRelationShip.add(conn);
+        } else {
+          Datasource datasource = new Datasource();
+          datasource.setDatabaseId(tmpRel.getId());
+          datasource.setContainerId(tmpRel.getTemplateId());
+          listRelationShip.add(datasource);
+        }
+
+      }
+      topo.setRelationShipList(listRelationShip);
+      env.setTopology(topo);
+      resultList.add(env);
+
+      // TODO ADD Application link into Environment
+    }
+    return resultList;
   }
 }
