@@ -47,8 +47,8 @@
   </modules>
 
     <scm>
-        <connection>scm:git:https://florent.benoit@forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</connection>
-        <developerConnection>scm:git:https://florent.benoit@forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</developerConnection>
+        <connection>scm:git:https://forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</connection>
+        <developerConnection>scm:git:https://forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</developerConnection>
         <url>https://forge.peergreen.com/git/summary/?r=jpaas/jpaas-environment-manager.git</url>
         <tag>HEAD</tag>
     </scm>
