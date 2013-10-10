@@ -18,39 +18,66 @@
   -
   - $Id:$
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.ow2</groupId>
-    <artifactId>ow2</artifactId>
-    <version>1.3</version>
-  </parent>
+    <parent>
+        <groupId>org.ow2</groupId>
+        <artifactId>ow2</artifactId>
+        <version>1.3</version>
+    </parent>
 
-  <groupId>org.ow2.jonas.jpaas.jpaas-environment-manager</groupId>
-  <artifactId>jpaas-environment-manager</artifactId>
-  <version>1.0.0-M2-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>org.ow2.jonas.jpaas.jpaas-environment-manager</groupId>
+    <artifactId>jpaas-environment-manager</artifactId>
+    <version>1.0.0-M2-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-  <description>JPaaS :: Environment Manager</description>
+    <description>JPaaS :: Environment Manager</description>
 
-  <developers />
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-    </license>
-  </licenses>
+    <properties>
+        <ow2-bundles.version>1.0.32</ow2-bundles.version>
+        <jdk.version>1.7</jdk.version>
+        <ow2-spec.version>1.0.13</ow2-spec.version>
+        <maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
+        <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+        <maven.surefire.plugin.version>2.12</maven.surefire.plugin.version>
+        <easybeans-version>1.2.3</easybeans-version>
+        <manager-api.version>1.0.0-M1</manager-api.version>
+        <bonita.version>5.6.2</bonita.version>
+        <ipojo.version>1.10.1</ipojo.version>
+        <sr.version>1.0.0-M2-SNAPSHOT</sr.version>
+        <application-manager.version>1.0.0-M2-SNAPSHOT</application-manager.version>
+        <jpaas-util.version>1.0-M2-SNAPSHOT</jpaas-util.version>
+        <resource-pool.version>1.0.0-M2-SNAPSHOT</resource-pool.version>
+        <vm-configurator.version>1.0.0-M2-SNAPSHOT</vm-configurator.version>
+        <container-manager.version>1.0.0-M2-SNAPSHOT</container-manager.version>
 
-  <modules>
-    <module>ejb</module>
-  </modules>
+    </properties>
+
+
+    <developers/>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
 
     <scm>
         <connection>scm:git:https://forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</connection>
-        <developerConnection>scm:git:https://forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git</developerConnection>
+        <developerConnection>scm:git:https://forge.peergreen.com/git/git/jpaas/jpaas-environment-manager.git
+        </developerConnection>
         <url>https://forge.peergreen.com/git/summary/?r=jpaas/jpaas-environment-manager.git</url>
         <tag>HEAD</tag>
     </scm>
+
+    <modules>
+        <module>api</module>
+        <module>ejb</module>
+        <module>mock</module>
+    </modules>
+
 
 </project>
