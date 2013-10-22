@@ -1,339 +1,256 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  - JPaaS
-  - Copyright (C) 2011-2012 Bull S.A.S.
-  - Contact: jonas@ow2.org
-  -
-  - Licensed under the Apache License, Version 2.0 (the "License");
-  - you may not use this file except in compliance with the License.
-  - You may obtain a copy of the License at
-  - 
-  -     http://www.apache.org/licenses/LICENSE-2.0
-  - 
-  - Unless required by applicable law or agreed to in writing, software
-  - distributed under the License is distributed on an "AS IS" BASIS,
-  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  - See the License for the specific language governing permissions and
-  - limitations under the License.
-  -
-  - $Id:$
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.ow2.jonas.jpaas.jpaas-environment-manager</groupId>
-        <artifactId>jpaas-environment-manager</artifactId>
-        <version>1.0.0-M2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>com.peergreen.paas</groupId>
+    <artifactId>paas-environment-manager</artifactId>
+    <version>1.0.0-M1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>paas-environment-manager-ejb</artifactId>
+  <packaging>bundle</packaging>
 
-    <artifactId>environment-manager-ejb</artifactId>
-    <name>JPaaS :: Environment Manager :: EJB</name>
-    <packaging>bundle</packaging>
+  <name>PG PaaS :: Environment Manager :: EJB</name>
 
-    <description>jPaaS :: Environment Manager :: EJB</description>
+  <dependencies>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-6.0</artifactId>
-            <version>1.0.0.Final</version>
-            <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>com.peergreen.paas</groupId>
+      <artifactId>paas-manager-api</artifactId>
+      <version>${paas-manager-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.bonita</groupId>
+      <artifactId>bonita-server</artifactId>
+      <version>${bonita.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.bonita</groupId>
+      <artifactId>bonita-client</artifactId>
+      <version>${bonita.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.easybeans</groupId>
+      <artifactId>easybeans-component-smartclient</artifactId>
+      <version>${easybeans.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.easybeans.osgi</groupId>
+      <artifactId>easybeans-osgi-annotations</artifactId>
+      <version>${easybeans.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
+      <version>${ow2-bundles.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>org.ow2.jonas.jpaas.jpaas-manager-api</groupId>
-            <artifactId>jpaas-manager-api</artifactId>
-            <version>${manager-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.bonita</groupId>
-            <artifactId>bonita-server</artifactId>
-            <version>${bonita.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.bonita</groupId>
-            <artifactId>bonita-client</artifactId>
-            <version>${bonita.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.easybeans</groupId>
-            <artifactId>easybeans-component-smartclient</artifactId>
-            <version>${easybeans-version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.easybeans.osgi</groupId>
-            <artifactId>easybeans-osgi-annotations</artifactId>
-            <version>${easybeans-version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.bundles</groupId>
-            <artifactId>ow2-util-log</artifactId>
-            <version>${ow2-bundles.version}</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>com.peergreen.paas</groupId>
+      <artifactId>paas-system-representation-vo</artifactId>
+      <version>${paas-sr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.peergreen.paas</groupId>
+      <artifactId>paas-system-representation-api</artifactId>
+      <version>${paas-sr.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
-            <artifactId>system-representation-vo</artifactId>
-            <version>${sr.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
-            <artifactId>system-representation-api</artifactId>
-            <version>${sr.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>com.peergreen.paas</groupId>
+      <artifactId>paas-environment-manager-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
-        <dependency>
-            <groupId>org.ow2.jonas.jpaas.jpaas-environment-manager</groupId>
-            <artifactId>environment-manager-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+  <build>
+    <plugins>
 
-    <build>
-        <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.4</version>
+        <!-- KEEP JUST FOR FACILITIES USED INTO BONITA STUDIO !! -->
+        <executions>
+          <execution>
+            <id>dependances for process</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-manager-api</artifactId>
+                  <version>${paas-manager-api.version.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.4</version>
-                <!-- KEEP JUST FOR FACILITIES USED INTO BONITA STUDIO !!-->
-                <executions>
-                    <execution>
-                        <id>dependances for process</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.jpaas-manager-api</groupId>
-                                    <artifactId>jpaas-manager-api</artifactId>
-                                    <version>${manager-api.version.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-application-manager-ejb</artifactId>
+                  <version>${paas-application-manager.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <artifactId>application-manager-ejb</artifactId>
-                                    <groupId>org.ow2.jonas.jpaas.jpaas-application-manager</groupId>
-                                    <version>${application-manager.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-common</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>common</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-node-template-external-db</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-node-template-jk</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-node-template-external-db</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-node-template-jonas</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-topology-connector</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-node-template-jk</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-topology-datasource</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-util-cloud-descriptors-environment-template-core</artifactId>
+                  <version>${paas-util.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-node-template-jonas</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>org.ow2.util</groupId>
+                  <artifactId>util-i18n</artifactId>
+                  <version>${ow2-bundles.version}</version>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-topology-connector</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>org.ow2.util</groupId>
+                  <artifactId>util-log</artifactId>
+                  <version>${ow2-bundles.version}</version>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-topology-datasource</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-resource-pool-ejb</artifactId>
+                  <version>${paas-resource-pool.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-vm-configurator-core</artifactId>
+                  <version>${paas-vm-configurator.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.util.cloud-desc</groupId>
-                                    <artifactId>environment-template-core</artifactId>
-                                    <version>${jpaas-util.version}</version>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-system-representation-vo</artifactId>
+                  <version>${paas-sr.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-system-representation-ejb</artifactId>
+                  <version>${paas-sr.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>org.ow2.util</groupId>
-                                    <artifactId>util-i18n</artifactId>
-                                    <version>${ow2-bundles.version}</version>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.util</groupId>
-                                    <artifactId>util-log</artifactId>
-                                    <version>${ow2-bundles.version}</version>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.resource-pool</groupId>
-                                    <artifactId>resource-pool-ejb</artifactId>
-                                    <version>${resource-pool.version}</version>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.vm-configurator</groupId>
-                                    <artifactId>vm-configurator-core</artifactId>
-                                    <version>${vm-configurator.version}</version>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
-                                    <version>${sr.version}</version>
-                                    <artifactId>system-representation-vo</artifactId>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas.system-representation</groupId>
-                                    <version>${sr.version}</version>
-                                    <artifactId>system-representation-ejb</artifactId>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.ow2.jonas.jpaas</groupId>
-                                    <version>${container-manager.version}</version>
-                                    <artifactId>container-manager-ejb</artifactId>
-
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
-                                    </outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.3.7</version>
-                <extensions>true</extensions>
-                <goals>
-                    <goal>bundle</goal>
-                </goals>
-                <configuration>
-                    <instructions>
-                        <!--<_include>-target/classes/META-INF/${project.artifactId}.bnd</_include>-->
-                        <Bundle-Activator>org.ow2.easybeans.osgi.ejbjar.Activator</Bundle-Activator>
-                        <DynamicImport-Package>*</DynamicImport-Package>
-                        <Export-Package>org.ow2.jonas.jpaas.environment.manager.api</Export-Package>
-                        <Import-Package>
-                            !com.thoughtworks.*,!org.jboss.*,!org.apache.tools.ant,!org.apache.tools.ant.*,!org.ow2.util.asm,*
-                        </Import-Package>
-                        <Private-Package>org.ow2.jonas.jpaas.environment.manager.bean</Private-Package>
-                        <Include-Resource>
-                            {maven-resources},${project.basedir}/src/process/CreateEnvironment/CreateEnvironment--1.0.bar,
-                            ${project.basedir}/src/process/CreateEnvironment/InstanciateRouter--1.0.bar,
-                            ${project.basedir}/src/process/CreateEnvironment/InstanciateDatabase--1.0.bar,
-                            ${project.basedir}/src/process/CreateEnvironment/InstanciateContainer--1.0.bar,
-                            ${project.basedir}/src/process/CreateEnvironment/InstanciateConnectors--1.0.bar,
-                            ${project.basedir}/src/process/CreateEnvironment/InstanciateConnector--1.0.bar,
-                            ${project.basedir}/src/process/DeleteEnvironment/DeleteEnvironment--1.0.bar,
-                            src/main/resources
-                        </Include-Resource>
-                        <Embed-Dependency>bonita-client</Embed-Dependency>
-                        <Embed-Transitive>false</Embed-Transitive>
-                    </instructions>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </build>
+                <artifactItem>
+                  <groupId>com.peergreen.paas</groupId>
+                  <artifactId>paas-container-manager-ejb</artifactId>
+                  <version>${paas-container-manager.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/processCreateEnvironment/libs
+                  </outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

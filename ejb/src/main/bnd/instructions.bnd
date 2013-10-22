@@ -1,0 +1,22 @@
+Bundle-Activator org.ow2.easybeans.osgi.ejbjar.Activator
+
+DynamicImport-Package *
+
+Export-Package org.ow2.jonas.jpaas.environment.manager.api
+
+Import-Package !com.thoughtworks.*,!org.jboss.*,!org.apache.tools.ant,!org.apache.tools.ant.*,!org.ow2.util.asm,*
+
+Private-Package org.ow2.jonas.jpaas.environment.manager.bean
+
+Include-Resource {maven-resources}, \
+              src/process/CreateEnvironment/CreateEnvironment--1.0.bar, \
+              src/process/CreateEnvironment/InstanciateRouter--1.0.bar, \
+              src/process/CreateEnvironment/InstanciateDatabase--1.0.bar, \
+              src/process/CreateEnvironment/InstanciateContainer--1.0.bar, \
+              src/process/CreateEnvironment/InstanciateConnectors--1.0.bar, \
+              src/process/CreateEnvironment/InstanciateConnector--1.0.bar, \
+              src/process/DeleteEnvironment/DeleteEnvironment--1.0.bar
+
+Embed-Dependency bonita-client
+
+Embed-Transitive false
