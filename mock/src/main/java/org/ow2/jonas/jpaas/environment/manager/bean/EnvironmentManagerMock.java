@@ -3,6 +3,7 @@ package org.ow2.jonas.jpaas.environment.manager.bean;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerBeanException;
 import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
@@ -28,6 +29,20 @@ public class EnvironmentManagerMock implements EnvironmentManager {
      */
     private Log logger = LogFactory.getLog(EnvironmentManagerMock.class);
 
+    private Map<String, Environment> envList;
+
+    @Validate
+    public void init() {
+        envList = new HashMap<String, Environment>();
+
+        Environment env = new Environment();
+        env.setEnvId(UUID.randomUUID().toString());
+        env.setEnvName("myenv");
+
+        envList.put(env.getEnvId(), env);
+    }
+
+
 
     public Future<Environment> createEnvironment(final String environmentTemplateDescriptor) throws EnvironmentManagerBeanException {
         final Map param = new HashMap();
@@ -49,6 +64,7 @@ public class EnvironmentManagerMock implements EnvironmentManager {
                 }
                 env.setEnvId(UUID.randomUUID().toString());
                 env.setEnvName(environmentTemplate.getName());
+                envList.put(env.getEnvId(), env);
                 return env;
             }
         });
@@ -71,15 +87,7 @@ public class EnvironmentManagerMock implements EnvironmentManager {
     }
 
     public List<Environment> findEnvironments() {
-        Environment env = new Environment();
-        env.setEnvId(UUID.randomUUID().toString());
-        env.setEnvName("myenv");
-
-        List<Environment> envList = new ArrayList<Environment>();
-        envList.add(env);
-
-        return envList;
-
+        return new ArrayList(envList.values());
     }
 
     public Future<Environment> startEnvironment(final String envId) {
@@ -155,12 +163,9 @@ public class EnvironmentManagerMock implements EnvironmentManager {
     }
 
     public Environment getEnvironment(final String envId) {
-        //TODO
         logger.info("JPAAS-ENVIRONMENT-MANAGER / getEnvironment called");
-        Environment env = new Environment();
-        env.setEnvId(envId);
-        env.setEnvName("myenv");
-        return env;
+
+        return envList.get(envId);
     }
 
     public List<ApplicationVersionInstance> getDeployedApplicationVersionInstance(String envId) {
