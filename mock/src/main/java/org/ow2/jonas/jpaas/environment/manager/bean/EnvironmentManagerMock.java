@@ -6,45 +6,27 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManager;
 import org.ow2.jonas.jpaas.environment.manager.api.EnvironmentManagerBeanException;
 import org.ow2.jonas.jpaas.manager.api.ApplicationVersionInstance;
-import org.ow2.jonas.jpaas.manager.api.Connector;
-import org.ow2.jonas.jpaas.manager.api.Datasource;
 import org.ow2.jonas.jpaas.manager.api.Environment;
-import org.ow2.jonas.jpaas.manager.api.ExternalDatabase;
-import org.ow2.jonas.jpaas.manager.api.JkRouter;
-import org.ow2.jonas.jpaas.manager.api.JonasContainer;
-import org.ow2.jonas.jpaas.manager.api.Node;
-import org.ow2.jonas.jpaas.manager.api.Relationship;
-import org.ow2.jonas.jpaas.manager.api.Topology;
-import org.ow2.jonas.jpaas.util.clouddescriptors.cloudapplication.CloudApplicationDesc;
-import org.ow2.jonas.jpaas.util.clouddescriptors.cloudapplication.v1.generated.CloudApplicationType;
 import org.ow2.jonas.jpaas.util.clouddescriptors.environmenttemplate.EnvironmentTemplateDesc;
 import org.ow2.jonas.jpaas.util.clouddescriptors.environmenttemplate.v1.generated.EnvironmentTemplateType;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import javax.naming.Context;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component(immediate = true)
 @Instantiate
 @Provides
-public class EnvironmentManagerBean implements EnvironmentManager {
+public class EnvironmentManagerMock implements EnvironmentManager {
 
     /**
      * The logger
      */
-    private Log logger = LogFactory.getLog(EnvironmentManagerBean.class);
+    private Log logger = LogFactory.getLog(EnvironmentManagerMock.class);
 
 
     public Future<Environment> createEnvironment(final String environmentTemplateDescriptor) throws EnvironmentManagerBeanException {
