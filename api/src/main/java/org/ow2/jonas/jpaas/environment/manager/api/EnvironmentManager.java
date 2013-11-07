@@ -28,8 +28,8 @@ public interface EnvironmentManager {
   public Future<Environment> createEnvironment(String environmentTemplateDescriptor) throws EnvironmentManagerBeanException;
   public Future deleteEnvironment(String envid) throws EnvironmentManagerBeanException;
   public List<Environment> findEnvironments();
-  public Future<Environment> startEnvironment(String envId);
-  public Future<Environment> stopEnvironment(String envId);
+  public Future<Environment> startEnvironment(String envId) throws EnvironmentManagerBeanException;
+  public Future<Environment> stopEnvironment(String envId) throws EnvironmentManagerBeanException;
   public Future<ApplicationVersionInstance> deployApplication(String envId, String appId,String versionId, String instanceId);
   public Future<ApplicationVersionInstance> undeployApplication(String envId, String appId,String versionId, String instanceId);
   public Environment getEnvironment(String envId);

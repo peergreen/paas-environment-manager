@@ -90,7 +90,7 @@ public class EnvironmentManagerMock implements EnvironmentManager {
         return new ArrayList(envList.values());
     }
 
-    public Future<Environment> startEnvironment(final String envId) {
+    public Future<Environment> startEnvironment(final String envId) throws EnvironmentManagerBeanException {
         logger.info("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
         ExecutorService es = Executors.newFixedThreadPool(3);
         final Future<Environment> future = es.submit(new Callable<Environment>() {
@@ -107,7 +107,7 @@ public class EnvironmentManagerMock implements EnvironmentManager {
 
     }
 
-    public Future<Environment> stopEnvironment(final String envId) {
+    public Future<Environment> stopEnvironment(final String envId) throws EnvironmentManagerBeanException {
         logger.info("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
         ExecutorService es = Executors.newFixedThreadPool(3);
         final Future<Environment> future = es.submit(new Callable<Environment>() {
@@ -133,8 +133,6 @@ public class EnvironmentManagerMock implements EnvironmentManager {
                 appVersionInstance.setInstanceName(instanceId);
                 appVersionInstance.setState(ApplicationVersionInstance.INSTANCE_STARTED);
                 appVersionInstance.setTargetEnvId(envId);
-
-
                 return appVersionInstance;
             }
         });
@@ -154,8 +152,6 @@ public class EnvironmentManagerMock implements EnvironmentManager {
                 appVersionInstance.setInstanceName(instanceId);
                 appVersionInstance.setState(ApplicationVersionInstance.INSTANCE_STOPPED);
                 appVersionInstance.setTargetEnvId(envId);
-
-
                 return appVersionInstance;
             }
         });

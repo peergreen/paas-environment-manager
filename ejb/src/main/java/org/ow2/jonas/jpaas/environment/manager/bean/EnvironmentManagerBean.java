@@ -216,13 +216,13 @@ public class EnvironmentManagerBean implements EnvironmentManager {
             return new ArrayList<Environment>();
     }
 
-    public Future<Environment> startEnvironment(String envId) {
+    public Future<Environment> startEnvironment(String envId) throws EnvironmentManagerBeanException {
         //TODO
         logger.info("JPAAS-ENVIRONMENT-MANAGER / startEnvironment called");
         return null;
     }
 
-    public Future<Environment> stopEnvironment(String envId) {
+    public Future<Environment> stopEnvironment(String envId) throws EnvironmentManagerBeanException {
         //TODO
         logger.info("JPAAS-ENVIRONMENT-MANAGER / stopEnvironment called");
         return null;
